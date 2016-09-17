@@ -37,6 +37,7 @@ import android.widget.AdapterView.OnItemClickListener;
 
 import com.zhangyunfei.bluetirepersuretools.R;
 import com.zhangyunfei.bluetirepersuretools.bluetooth.contract.BlueToothDiscovery;
+import com.zhangyunfei.bluetirepersuretools.bluetooth.contract.BlueToothDiscoverySimple;
 import com.zhangyunfei.bluetirepersuretools.bluetooth.contract.DeviceDiscoveryCallback;
 
 /**
@@ -93,7 +94,7 @@ public class DeviceListActivity extends Activity {
         newDevicesListView.setAdapter(mNewDevicesArrayAdapter);
         newDevicesListView.setOnItemClickListener(mDeviceClickListener);
 
-        blueToothDiscovery = new BlueToothDiscovery(this, deviceDiscoveryCallback);
+        blueToothDiscovery = new BlueToothDiscoverySimple(this, deviceDiscoveryCallback);
 
         // Get a set of currently paired devices
         Set<BluetoothDevice> pairedDevices = blueToothDiscovery.getBondedDevices();
@@ -115,7 +116,7 @@ public class DeviceListActivity extends Activity {
         super.onDestroy();
 
         if (blueToothDiscovery != null)
-            blueToothDiscovery.release(this);
+            blueToothDiscovery.release();
 
     }
 

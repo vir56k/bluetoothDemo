@@ -1,0 +1,26 @@
+[
+    {
+        "merged": "/Users/zhangyunfei/git/BlueTirepersureTools/zyfutilbluetoothprinter/build/intermediates/res/merged/debug/layout/printdata_layout.xml",
+        "source": "/Users/zhangyunfei/git/BlueTirepersureTools/zyfutilbluetoothprinter/src/main/res/layout/printdata_layout.xml"
+    },
+    {
+        "merged": "/Users/zhangyunfei/git/BlueTirepersureTools/zyfutilbluetoothprinter/build/intermediates/res/merged/debug/layout/unbonddevice_item.xml",
+        "source": "/Users/zhangyunfei/git/BlueTirepersureTools/zyfutilbluetoothprinter/src/main/res/layout/unbonddevice_item.xml"
+    },
+    {
+        "merged": "/Users/zhangyunfei/git/BlueTirepersureTools/zyfutilbluetoothprinter/build/intermediates/res/merged/debug/layout/bluetooth_layout.xml",
+        "source": "/Users/zhangyunfei/git/BlueTirepersureTools/zyfutilbluetoothprinter/src/main/res/layout/bluetooth_layout.xml"
+    },
+    {
+        "merged": "/Users/zhangyunfei/git/BlueTirepersureTools/zyfutilbluetoothprinter/build/intermediates/res/merged/debug/layout/bonddevice_item.xml",
+        "source": "/Users/zhangyunfei/git/BlueTirepersureTools/zyfutilbluetoothprinter/src/main/res/layout/bonddevice_item.xml"
+    },
+    {
+        "merged": "/Users/zhangyunfei/git/BlueTirepersureTools/zyfutilbluetoothprinter/build/intermediates/res/merged/debug/layout/my_printer_activity.xml",
+        "source": "/Users/zhangyunfei/git/BlueTirepersureTools/zyfutilbluetoothprinter/src/main/res/layout/my_printer_activity.xml"
+    },
+    {
+        "merged": "/Users/zhangyunfei/git/BlueTirepersureTools/zyfutilbluetoothprinter/build/intermediates/res/merged/debug/layout/demo_activity.xml",
+        "source": "/Users/zhangyunfei/git/BlueTirepersureTools/zyfutilbluetoothprinter/src/main/res/layout/demo_activity.xml"
+    }
+]

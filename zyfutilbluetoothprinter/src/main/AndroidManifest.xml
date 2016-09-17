@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="zyf.util.bluetoothprinter"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+
+    <uses-sdk
+        android:minSdkVersion="8"
+        android:targetSdkVersion="18" />
+
+    <application
+        android:allowBackup="true"
+        android:label="@string/app_name"
+        android:theme="@android:style/Theme.Light.NoTitleBar" >
+        <activity android:name="zyf.util.bluetoothprinter.PrintDataActivity" />
+        <activity android:name="zyf.util.bluetoothprinter.DemoActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <!-- 当作为类库时，下面两个是必须 引用的 -->
+        <activity android:name="com.jerry.bluetoothprinter.view.BluetoothActivity" >
+        </activity>
+        <activity android:name="zyf.util.bluetoothprinter.MyPrinterActivity" >
+        </activity>
+    </application>
+
+</manifest>

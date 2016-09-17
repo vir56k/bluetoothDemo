@@ -20,6 +20,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -39,7 +40,7 @@ import java.util.UUID;
  * incoming connections, a thread for connecting with a device, and a
  * thread for performing data transmissions when connected.
  */
-public class BluetoothChatService2 {
+public class BluetoothService2 {
     // Debugging
     private static final String TAG = "BluetoothChatService";
     private static final boolean D = true;
@@ -66,7 +67,7 @@ public class BluetoothChatService2 {
      * @param context The UI Activity Context
      * @param handler A Handler to send messages back to the UI Activity
      */
-    public BluetoothChatService2(Context context, Handler handler) {
+    public BluetoothService2(Context context, Handler handler) {
         mAdapter = BluetoothAdapter.getDefaultAdapter();
         mState = STATE_NONE;
         mHandler = handler;
@@ -231,7 +232,7 @@ public class BluetoothChatService2 {
         mHandler.sendMessage(msg);
 
         // Start the service over to restart listening mode
-        BluetoothChatService2.this.start();
+        BluetoothService2.this.start();
     }
 
     /**
@@ -246,7 +247,7 @@ public class BluetoothChatService2 {
         mHandler.sendMessage(msg);
 
         // Start the service over to restart listening mode
-        BluetoothChatService2.this.start();
+        BluetoothService2.this.start();
     }
 
 
@@ -307,7 +308,7 @@ public class BluetoothChatService2 {
             }
 
             // Reset the ConnectThread because we're done
-            synchronized (BluetoothChatService2.this) {
+            synchronized (BluetoothService2.this) {
                 mConnectThread = null;
             }
 
@@ -369,7 +370,7 @@ public class BluetoothChatService2 {
                     Log.e(TAG, "disconnected", e);
                     connectionLost();
                     // Start the service over to restart listening mode
-                    BluetoothChatService2.this.start();
+                    BluetoothService2.this.start();
                     break;
                 }
             }
@@ -398,6 +399,24 @@ public class BluetoothChatService2 {
             } catch (IOException e) {
                 Log.e(TAG, "close() of connect socket failed", e);
             }
+        }
+    }
+
+
+    /**
+     * 可被发现
+     *
+     * @param context context
+     */
+    public void ensureDiscoverable(Context context) {
+        if (context == null)
+            throw new NullPointerException();
+        if (D) Log.d(TAG, "ensure discoverable");
+        if (mAdapter.getScanMode() !=
+                BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE) {
+            Intent discoverableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
+            discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300);
+            context.startActivity(discoverableIntent);
         }
     }
 }

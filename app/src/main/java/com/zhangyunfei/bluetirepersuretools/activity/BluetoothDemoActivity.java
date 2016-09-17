@@ -40,7 +40,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.zhangyunfei.bluetirepersuretools.bluetooth.BluetoothChatService2;
+import com.zhangyunfei.bluetirepersuretools.bluetooth.BluetoothService2;
 import com.zhangyunfei.bluetirepersuretools.R;
 
 /**
@@ -79,7 +79,7 @@ public class BluetoothDemoActivity extends Activity {
     // Local Bluetooth adapter
     private BluetoothAdapter mBluetoothAdapter = null;
     // Member object for the chat services
-    private BluetoothChatService2 mChatService = null;
+    private BluetoothService2 mChatService = null;
 
     private TextView edit_text_out;
     private MyHandlerLoop myHandlerLoop;
@@ -139,7 +139,7 @@ public class BluetoothDemoActivity extends Activity {
         // onResume() will be called when ACTION_REQUEST_ENABLE activity returns.
         if (mChatService != null) {
             // Only if the state is STATE_NONE, do we know that we haven't started already
-            if (mChatService.getState() == BluetoothChatService2.STATE_NONE) {
+            if (mChatService.getState() == BluetoothService2.STATE_NONE) {
                 // Start the Bluetooth chat services
                 mChatService.start();
             }
@@ -171,7 +171,7 @@ public class BluetoothDemoActivity extends Activity {
         });
 
         // Initialize the BluetoothChatService to perform bluetooth connections
-        mChatService = new BluetoothChatService2(this, mHandler);
+        mChatService = new BluetoothService2(this, mHandler);
 
         // Initialize the buffer for outgoing messages
         mOutStringBuffer = new StringBuilder("");
@@ -198,16 +198,6 @@ public class BluetoothDemoActivity extends Activity {
         if (D) Log.e(TAG, "--- ON DESTROY ---");
     }
 
-    private void ensureDiscoverable() {
-        if (D) Log.d(TAG, "ensure discoverable");
-        if (mBluetoothAdapter.getScanMode() !=
-                BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE) {
-            Intent discoverableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
-            discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300);
-            startActivity(discoverableIntent);
-        }
-    }
-
     /**
      * Sends a message.
      *
@@ -215,7 +205,7 @@ public class BluetoothDemoActivity extends Activity {
      */
     private void sendMessageTo(String message) {
         // Check that we're actually connected before trying anything
-        if (mChatService.getState() != BluetoothChatService2.STATE_CONNECTED) {
+        if (mChatService.getState() != BluetoothService2.STATE_CONNECTED) {
             Toast.makeText(this, R.string.not_connected, Toast.LENGTH_SHORT).show();
             return;
         }
@@ -253,15 +243,15 @@ public class BluetoothDemoActivity extends Activity {
                 case MESSAGE_STATE_CHANGE:
                     if (D) Log.i(TAG, "消息状态发生改变: " + msg.arg1);
                     switch (msg.arg1) {
-                        case BluetoothChatService2.STATE_CONNECTED:
+                        case BluetoothService2.STATE_CONNECTED:
                             setStatus(getString(R.string.title_connected_to, mConnectedDeviceName));
                             mConversationArrayAdapter.clear();
                             break;
-                        case BluetoothChatService2.STATE_CONNECTING:
+                        case BluetoothService2.STATE_CONNECTING:
                             setStatus(R.string.title_connecting);
                             break;
-                        case BluetoothChatService2.STATE_LISTEN:
-                        case BluetoothChatService2.STATE_NONE:
+                        case BluetoothService2.STATE_LISTEN:
+                        case BluetoothService2.STATE_NONE:
                             setStatus(R.string.title_not_connected);
                             break;
                     }
@@ -338,14 +328,14 @@ public class BluetoothDemoActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent serverIntent = null;
         switch (item.getItemId()) {
-            case R.id.secure_connect_scan:
+            case R.id.secure_connect_scan://触发扫描设备
                 // Launch the DeviceListActivity to see devices and do scan
                 serverIntent = new Intent(this, DeviceListActivity.class);
                 startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE);
                 return true;
-            case R.id.discoverable:
+            case R.id.discoverable://可被发现设备
                 // Ensure this device is discoverable by others
-                ensureDiscoverable();
+                mChatService.ensureDiscoverable(getActivity());
                 return true;
         }
         return false;
@@ -353,6 +343,10 @@ public class BluetoothDemoActivity extends Activity {
 
     public boolean isEnableLoop() {
         return switch1_loop.isChecked();
+    }
+
+    public Activity getActivity() {
+        return this;
     }
 
     public static class MyHandlerLoop extends Handler {

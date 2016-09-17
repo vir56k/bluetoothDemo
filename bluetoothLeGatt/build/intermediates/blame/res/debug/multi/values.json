@@ -1,0 +1,330 @@
+[
+    {
+        "outputFile": "/Users/zhangyunfei/git/BlueTirepersureTools/bluetoothLeGatt/build/intermediates/res/merged/debug/values/values.xml",
+        "map": [
+            {
+                "to": {
+                    "startLine": 2,
+                    "startColumn": 4,
+                    "startOffset": 55,
+                    "endColumn": 47,
+                    "endOffset": 98
+                },
+                "from": {
+                    "file": "/Users/zhangyunfei/git/BlueTirepersureTools/bluetoothLeGatt/src/main/res/values/strings.xml",
+                    "position": {
+                        "startLine": 16,
+                        "startColumn": 4,
+                        "startOffset": 686,
+                        "endColumn": 47,
+                        "endOffset": 729
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 3,
+                    "startColumn": 4,
+                    "startOffset": 103,
+                    "endColumn": 66,
+                    "endOffset": 165
+                },
+                "from": {
+                    "file": "/Users/zhangyunfei/git/BlueTirepersureTools/bluetoothLeGatt/src/main/res/values/strings.xml",
+                    "position": {
+                        "startLine": 17,
+                        "startColumn": 4,
+                        "startOffset": 734,
+                        "endColumn": 66,
+                        "endOffset": 796
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 4,
+                    "startColumn": 4,
+                    "startOffset": 170,
+                    "endColumn": 47,
+                    "endOffset": 213
+                },
+                "from": {
+                    "file": "/Users/zhangyunfei/git/BlueTirepersureTools/bluetoothLeGatt/src/main/res/values/strings.xml",
+                    "position": {
+                        "startLine": 22,
+                        "startColumn": 4,
+                        "startOffset": 1002,
+                        "endColumn": 47,
+                        "endOffset": 1045
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 5,
+                    "startColumn": 4,
+                    "startOffset": 218,
+                    "endColumn": 53,
+                    "endOffset": 267
+                },
+                "from": {
+                    "file": "/Users/zhangyunfei/git/BlueTirepersureTools/bluetoothLeGatt/src/main/res/values/strings.xml",
+                    "position": {
+                        "startLine": 23,
+                        "startColumn": 4,
+                        "startOffset": 1050,
+                        "endColumn": 53,
+                        "endOffset": 1099
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 6,
+                    "startColumn": 4,
+                    "startOffset": 272,
+                    "endColumn": 82,
+                    "endOffset": 350
+                },
+                "from": {
+                    "file": "/Users/zhangyunfei/git/BlueTirepersureTools/bluetoothLeGatt/src/main/res/values/strings.xml",
+                    "position": {
+                        "startLine": 25,
+                        "startColumn": 4,
+                        "startOffset": 1162,
+                        "endColumn": 82,
+                        "endOffset": 1240
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 7,
+                    "startColumn": 4,
+                    "startOffset": 355,
+                    "endColumn": 44,
+                    "endOffset": 395
+                },
+                "from": {
+                    "file": "/Users/zhangyunfei/git/BlueTirepersureTools/bluetoothLeGatt/src/main/res/values/strings.xml",
+                    "position": {
+                        "startLine": 18,
+                        "startColumn": 4,
+                        "startOffset": 801,
+                        "endColumn": 44,
+                        "endOffset": 841
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 8,
+                    "startColumn": 4,
+                    "startOffset": 400,
+                    "endColumn": 64,
+                    "endOffset": 460
+                },
+                "from": {
+                    "file": "/Users/zhangyunfei/git/BlueTirepersureTools/bluetoothLeGatt/src/main/res/values/strings.xml",
+                    "position": {
+                        "startLine": 19,
+                        "startColumn": 4,
+                        "startOffset": 846,
+                        "endColumn": 64,
+                        "endOffset": 906
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 9,
+                    "startColumn": 4,
+                    "startOffset": 465,
+                    "endColumn": 46,
+                    "endOffset": 507
+                },
+                "from": {
+                    "file": "/Users/zhangyunfei/git/BlueTirepersureTools/bluetoothLeGatt/src/main/res/values/strings.xml",
+                    "position": {
+                        "startLine": 20,
+                        "startColumn": 4,
+                        "startOffset": 911,
+                        "endColumn": 46,
+                        "endOffset": 953
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 10,
+                    "startColumn": 4,
+                    "startOffset": 512,
+                    "endColumn": 48,
+                    "endOffset": 556
+                },
+                "from": {
+                    "file": "/Users/zhangyunfei/git/BlueTirepersureTools/bluetoothLeGatt/src/main/res/values/strings.xml",
+                    "position": {
+                        "startLine": 32,
+                        "startColumn": 4,
+                        "startOffset": 1463,
+                        "endColumn": 48,
+                        "endOffset": 1507
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 11,
+                    "startColumn": 4,
+                    "startOffset": 561,
+                    "endColumn": 54,
+                    "endOffset": 611
+                },
+                "from": {
+                    "file": "/Users/zhangyunfei/git/BlueTirepersureTools/bluetoothLeGatt/src/main/res/values/strings.xml",
+                    "position": {
+                        "startLine": 33,
+                        "startColumn": 4,
+                        "startOffset": 1512,
+                        "endColumn": 54,
+                        "endOffset": 1562
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 12,
+                    "startColumn": 4,
+                    "startOffset": 616,
+                    "endColumn": 42,
+                    "endOffset": 654
+                },
+                "from": {
+                    "file": "/Users/zhangyunfei/git/BlueTirepersureTools/bluetoothLeGatt/src/main/res/values/strings.xml",
+                    "position": {
+                        "startLine": 34,
+                        "startColumn": 4,
+                        "startOffset": 1567,
+                        "endColumn": 42,
+                        "endOffset": 1605
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 13,
+                    "startColumn": 4,
+                    "startOffset": 659,
+                    "endColumn": 42,
+                    "endOffset": 697
+                },
+                "from": {
+                    "file": "/Users/zhangyunfei/git/BlueTirepersureTools/bluetoothLeGatt/src/main/res/values/strings.xml",
+                    "position": {
+                        "startLine": 35,
+                        "startColumn": 4,
+                        "startOffset": 1610,
+                        "endColumn": 42,
+                        "endOffset": 1648
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 14,
+                    "startColumn": 4,
+                    "startOffset": 702,
+                    "endColumn": 43,
+                    "endOffset": 741
+                },
+                "from": {
+                    "file": "/Users/zhangyunfei/git/BlueTirepersureTools/bluetoothLeGatt/src/main/res/values/strings.xml",
+                    "position": {
+                        "startLine": 21,
+                        "startColumn": 4,
+                        "startOffset": 958,
+                        "endColumn": 43,
+                        "endOffset": 997
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 15,
+                    "startColumn": 4,
+                    "startOffset": 746,
+                    "endColumn": 57,
+                    "endOffset": 799
+                },
+                "from": {
+                    "file": "/Users/zhangyunfei/git/BlueTirepersureTools/bluetoothLeGatt/src/main/res/values/strings.xml",
+                    "position": {
+                        "startLine": 24,
+                        "startColumn": 4,
+                        "startOffset": 1104,
+                        "endColumn": 57,
+                        "endOffset": 1157
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 16,
+                    "startColumn": 4,
+                    "startOffset": 804,
+                    "endColumn": 73,
+                    "endOffset": 873
+                },
+                "from": {
+                    "file": "/Users/zhangyunfei/git/BlueTirepersureTools/bluetoothLeGatt/src/main/res/values/strings.xml",
+                    "position": {
+                        "startLine": 28,
+                        "startColumn": 4,
+                        "startOffset": 1304,
+                        "endColumn": 73,
+                        "endOffset": 1373
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 17,
+                    "startColumn": 4,
+                    "startOffset": 878,
+                    "endColumn": 57,
+                    "endOffset": 931
+                },
+                "from": {
+                    "file": "/Users/zhangyunfei/git/BlueTirepersureTools/bluetoothLeGatt/src/main/res/values/strings.xml",
+                    "position": {
+                        "startLine": 27,
+                        "startColumn": 4,
+                        "startOffset": 1246,
+                        "endColumn": 57,
+                        "endOffset": 1299
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 18,
+                    "startColumn": 4,
+                    "startOffset": 936,
+                    "endColumn": 59,
+                    "endOffset": 991
+                },
+                "from": {
+                    "file": "/Users/zhangyunfei/git/BlueTirepersureTools/bluetoothLeGatt/src/main/res/values/strings.xml",
+                    "position": {
+                        "startLine": 29,
+                        "startColumn": 4,
+                        "startOffset": 1378,
+                        "endColumn": 59,
+                        "endOffset": 1433
+                    }
+                }
+            }
+        ]
+    }
+]

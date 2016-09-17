@@ -40,8 +40,8 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.zhangyunfei.bluetirepersuretools.bluetooth.BluetoothConnectionCallbackImpl;
-import com.zhangyunfei.bluetirepersuretools.bluetooth.BluetoothService2;
+import com.zhangyunfei.bluetirepersuretools.bluetooth.simple.BluetoothConnectionCallbackImpl;
+import com.zhangyunfei.bluetirepersuretools.bluetooth.simple.BluetoothService2;
 import com.zhangyunfei.bluetirepersuretools.R;
 
 /**

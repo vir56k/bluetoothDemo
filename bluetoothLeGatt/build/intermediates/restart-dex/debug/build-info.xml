@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<instant-run
+    abi="arm64-v8a,armeabi-v7a,armeabi"
+    api-level="22"
+    format="7"
+    timestamp="174186973868259"
+    token="-87713360532544627" >
+
+    <task
+        name="javac"
+        duration="0" />
+    <task
+        name="instant-run-dex"
+        duration="0" />
+    <task
+        name="instant-run-transform"
+        duration="0" />
+    <task
+        name="verifier"
+        duration="0" />
+
+    <build timestamp="173794730241507" >
+        <artifact
+            location="/Users/zhangyunfei/git/BlueTirepersureTools/bluetoothLeGatt/build/outputs/apk/bluetoothLeGatt-debug.apk"
+            type="MAIN" />
+    </build>
+    <build timestamp="174048891051617" >
+        <artifact
+            location="/Users/zhangyunfei/git/BlueTirepersureTools/bluetoothLeGatt/build/intermediates/transforms/dex/debug/folders/1000/5/slice_2/classes.dex"
+            type="DEX" />
+    </build>
+    <build timestamp="174186973868259" />
+
+</instant-run>

@@ -8,7 +8,7 @@ should evaluate whether these are still needed in your project and if
 so manually move them:
 
 * .DS_Store
-* build.xml
+* ic_launcher-web.png
 * proguard-project.txt
 
 Moved Files:
@@ -16,19 +16,10 @@ Moved Files:
 Android Gradle projects use a different directory structure than ADT
 Eclipse projects. Here's how the projects were restructured:
 
-* AndroidManifest.xml => zyfutilbluetoothprinter/src/main/AndroidManifest.xml
-* assets/ => zyfutilbluetoothprinter/src/main/assets
-* lint.xml => zyfutilbluetoothprinter/lint.xml
-* res/ => zyfutilbluetoothprinter/src/main/res/
-* src/ => zyfutilbluetoothprinter/src/main/java/
-* src/.DS_Store => zyfutilbluetoothprinter/src/main/resources/.DS_Store
-* src/com/.DS_Store => zyfutilbluetoothprinter/src/main/resources/com/.DS_Store
-* src/com/jerry/.DS_Store => zyfutilbluetoothprinter/src/main/resources/com/jerry/.DS_Store
-* src/com/jerry/bluetoothprinter/.DS_Store => zyfutilbluetoothprinter/src/main/resources/com/jerry/bluetoothprinter/.DS_Store
-* src/com/jerry/bluetoothprinter/view/.DS_Store => zyfutilbluetoothprinter/src/main/resources/com/jerry/bluetoothprinter/view/.DS_Store
-* src/zyf/.DS_Store => zyfutilbluetoothprinter/src/main/resources/zyf/.DS_Store
-* src/zyf/util/.DS_Store => zyfutilbluetoothprinter/src/main/resources/zyf/util/.DS_Store
-* src/zyf/util/bluetoothprinter/.DS_Store => zyfutilbluetoothprinter/src/main/resources/zyf/util/bluetoothprinter/.DS_Store
+* AndroidManifest.xml => bluetoothLeGatt/src/main/AndroidManifest.xml
+* lint.xml => bluetoothLeGatt/lint.xml
+* res/ => bluetoothLeGatt/src/main/res/
+* src/ => bluetoothLeGatt/src/main/java/
 
 Next Steps:
 -----------

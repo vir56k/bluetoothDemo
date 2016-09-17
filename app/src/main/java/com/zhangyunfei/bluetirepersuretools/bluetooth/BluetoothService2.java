@@ -22,12 +22,7 @@ import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
-
-import com.zhangyunfei.bluetirepersuretools.activity.BluetoothDemoActivity;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -42,7 +37,7 @@ import java.util.UUID;
  */
 public class BluetoothService2 {
     // Debugging
-    private static final String TAG = "BluetoothChatService";
+    private static final String TAG = "BluetoothService2";
     private static final boolean D = true;
 
     private static final UUID SPP_UUID = UUID
@@ -50,7 +45,6 @@ public class BluetoothService2 {
 
     // Member fields
     private final BluetoothAdapter mAdapter;
-    private final Handler mHandler;
     private ConnectThread mConnectThread;
     private ConnectedThread mConnectedThread;
     private int mState;
@@ -60,6 +54,7 @@ public class BluetoothService2 {
     public static final int STATE_LISTEN = 1;     // now listening for incoming connections
     public static final int STATE_CONNECTING = 2; // now initiating an outgoing connection
     public static final int STATE_CONNECTED = 3;  // now connected to a remote device
+    private BluetoothConnectionCallback connectionCallback;
 
     /**
      * Constructor. Prepares a new BluetoothDemoActivity session.
@@ -67,10 +62,10 @@ public class BluetoothService2 {
      * @param context The UI Activity Context
      * @param handler A Handler to send messages back to the UI Activity
      */
-    public BluetoothService2(Context context, Handler handler) {
+    public BluetoothService2(Context context, BluetoothConnectionCallback connectionCallback) {
         mAdapter = BluetoothAdapter.getDefaultAdapter();
         mState = STATE_NONE;
-        mHandler = handler;
+        this.connectionCallback = connectionCallback;
     }
 
     /**
@@ -79,11 +74,11 @@ public class BluetoothService2 {
      * @param state An integer defining the current connection state
      */
     private synchronized void setState(int state) {
-        if (D) Log.d(TAG, "setState() " + mState + " -> " + state);
+        int oldState = mState;
+        if (D) Log.e(TAG, "setState() " + oldState + " -> " + state);
         mState = state;
-
-        // Give the new state to the Handler so the UI Activity can update
-        mHandler.obtainMessage(BluetoothDemoActivity.MESSAGE_STATE_CHANGE, state, -1).sendToTarget();
+        if (connectionCallback != null)
+            connectionCallback.onMessageStateChange(oldState, mState);
     }
 
     /**
@@ -98,7 +93,7 @@ public class BluetoothService2 {
      * session in listening (server) mode. Called by the Activity onResume()
      */
     public synchronized void start() {
-        if (D) Log.d(TAG, "start");
+        if (D) Log.e(TAG, "start");
 
         // Cancel any thread attempting to make a connection
         if (mConnectThread != null) {
@@ -124,7 +119,7 @@ public class BluetoothService2 {
      * @param secure Socket Security type - Secure (true) , Insecure (false)
      */
     public synchronized void connect(BluetoothDevice device) {
-        if (D) Log.d(TAG, "connect to: " + device);
+        if (D) Log.e(TAG, "connect to: " + device);
 
         // Cancel any thread attempting to make a connection
         if (mState == STATE_CONNECTING) {
@@ -154,7 +149,7 @@ public class BluetoothService2 {
      */
     private synchronized void connected(BluetoothSocket socket, BluetoothDevice
             device, final String socketType) {
-        if (D) Log.d(TAG, "connected, Socket Type:" + socketType);
+        if (D) Log.e(TAG, "connected, Socket Type:" + socketType);
 
         // Cancel the thread that completed the connection
         if (mConnectThread != null) {
@@ -173,12 +168,9 @@ public class BluetoothService2 {
         mConnectedThread = new ConnectedThread(socket, socketType);
         mConnectedThread.start();
 
-        // Send the name of the connected device back to the UI Activity
-        Message msg = mHandler.obtainMessage(BluetoothDemoActivity.MESSAGE_DEVICE_NAME);
-        Bundle bundle = new Bundle();
-        bundle.putString(BluetoothDemoActivity.DEVICE_NAME, device.getName());
-        msg.setData(bundle);
-        mHandler.sendMessage(msg);
+        if (connectionCallback != null)
+            connectionCallback.onConnected(device.getName());
+
 
         setState(STATE_CONNECTED);
     }
@@ -187,7 +179,7 @@ public class BluetoothService2 {
      * Stop all threads
      */
     public synchronized void stop() {
-        if (D) Log.d(TAG, "stop");
+        if (D) Log.e(TAG, "stop");
 
         if (mConnectThread != null) {
             mConnectThread.cancel();
@@ -223,14 +215,10 @@ public class BluetoothService2 {
     /**
      * Indicate that the connection attempt failed and notify the UI Activity.
      */
-    private void connectionFailed() {
-        // Send a failure message back to the Activity
-        Message msg = mHandler.obtainMessage(BluetoothDemoActivity.MESSAGE_TOAST);
-        Bundle bundle = new Bundle();
-        bundle.putString(BluetoothDemoActivity.TOAST, "Unable to connect device");
-        msg.setData(bundle);
-        mHandler.sendMessage(msg);
-
+    private void raiseConnectionFailed() {
+        String str = "Unable to connect device";
+        if (connectionCallback != null)
+            connectionCallback.onConnectionFailed();
         // Start the service over to restart listening mode
         BluetoothService2.this.start();
     }
@@ -239,12 +227,8 @@ public class BluetoothService2 {
      * Indicate that the connection was lost and notify the UI Activity.
      */
     private void connectionLost() {
-        // Send a failure message back to the Activity
-        Message msg = mHandler.obtainMessage(BluetoothDemoActivity.MESSAGE_TOAST);
-        Bundle bundle = new Bundle();
-        bundle.putString(BluetoothDemoActivity.TOAST, "Device connection was lost");
-        msg.setData(bundle);
-        mHandler.sendMessage(msg);
+        if (connectionCallback != null)
+            connectionCallback.onConnectionLost();
 
         // Start the service over to restart listening mode
         BluetoothService2.this.start();
@@ -303,7 +287,7 @@ public class BluetoothService2 {
                     Log.e(TAG, "unable to close() " + mSocketType +
                             " socket during connection failure", e2);
                 }
-                connectionFailed();
+                raiseConnectionFailed();
                 return;
             }
 
@@ -335,7 +319,7 @@ public class BluetoothService2 {
         private final OutputStream mmOutStream;
 
         public ConnectedThread(BluetoothSocket socket, String socketType) {
-            Log.d(TAG, "create ConnectedThread: " + socketType);
+            Log.e(TAG, "create ConnectedThread: " + socketType);
             mmSocket = socket;
             InputStream tmpIn = null;
             OutputStream tmpOut = null;
@@ -362,10 +346,12 @@ public class BluetoothService2 {
                 try {
                     // Read from the InputStream
                     bytes = mmInStream.read(buffer);
-
-                    // Send the obtained bytes to the UI Activity
-                    mHandler.obtainMessage(BluetoothDemoActivity.MESSAGE_READ, bytes, -1, buffer)
-                            .sendToTarget();
+                    if (bytes > 0) {
+                        byte[] tmp = new byte[bytes];
+                        System.arraycopy(buffer, 0, tmp, 0, bytes);
+                        if (connectionCallback != null)
+                            connectionCallback.onReadMessage(tmp);
+                    }
                 } catch (IOException e) {
                     Log.e(TAG, "disconnected", e);
                     connectionLost();
@@ -384,10 +370,9 @@ public class BluetoothService2 {
         public void write(byte[] buffer) {
             try {
                 mmOutStream.write(buffer);
+                if (connectionCallback != null)
+                    connectionCallback.onWriteMessage(buffer);
 
-                // Share the sent message back to the UI Activity
-                mHandler.obtainMessage(BluetoothDemoActivity.MESSAGE_WRITE, -1, -1, buffer)
-                        .sendToTarget();
             } catch (IOException e) {
                 Log.e(TAG, "Exception during write", e);
             }
@@ -411,7 +396,7 @@ public class BluetoothService2 {
     public void ensureDiscoverable(Context context) {
         if (context == null)
             throw new NullPointerException();
-        if (D) Log.d(TAG, "ensure discoverable");
+        if (D) Log.e(TAG, "ensure discoverable");
         if (mAdapter.getScanMode() !=
                 BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE) {
             Intent discoverableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);

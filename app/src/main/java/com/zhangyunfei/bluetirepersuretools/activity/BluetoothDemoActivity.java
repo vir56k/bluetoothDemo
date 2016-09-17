@@ -40,6 +40,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.zhangyunfei.bluetirepersuretools.bluetooth.BluetoothConnectionCallbackImpl;
 import com.zhangyunfei.bluetirepersuretools.bluetooth.BluetoothService2;
 import com.zhangyunfei.bluetirepersuretools.R;
 
@@ -171,7 +172,7 @@ public class BluetoothDemoActivity extends Activity {
         });
 
         // Initialize the BluetoothChatService to perform bluetooth connections
-        mChatService = new BluetoothService2(this, mHandler);
+        mChatService = new BluetoothService2(this, new BluetoothConnectionCallbackImpl(mHandler));
 
         // Initialize the buffer for outgoing messages
         mOutStringBuffer = new StringBuilder("");
@@ -241,7 +242,7 @@ public class BluetoothDemoActivity extends Activity {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case MESSAGE_STATE_CHANGE:
-                    if (D) Log.i(TAG, "消息状态发生改变: " + msg.arg1);
+                    Log.d(TAG, "## 消息状态发生改变: " + msg.arg1);
                     switch (msg.arg1) {
                         case BluetoothService2.STATE_CONNECTED:
                             setStatus(getString(R.string.title_connected_to, mConnectedDeviceName));
@@ -265,7 +266,7 @@ public class BluetoothDemoActivity extends Activity {
                 case MESSAGE_READ:
                     byte[] readBuf = (byte[]) msg.obj;
                     // construct a string from the valid bytes in the buffer
-                    String readMessage = new String(readBuf, 0, msg.arg1);
+                    String readMessage = new String(readBuf);
                     mConversationArrayAdapter.add("收到:  " + readMessage);
                     break;
                 case MESSAGE_DEVICE_NAME:

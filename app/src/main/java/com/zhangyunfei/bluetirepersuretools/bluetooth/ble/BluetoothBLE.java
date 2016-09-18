@@ -526,3 +526,13 @@ public class BluetoothBLE {
     }
 
 }
+
+
+
+/**
+ *
+ * 参考 ： https://developer.android.com/sdk/api_diff/23/changes/android.bluetooth.BluetoothDevice.html
+ * http://www.wowotech.net/bluetooth/bt_overview.html
+ * http://www.it1352.com/336738.html
+ *
+ * */

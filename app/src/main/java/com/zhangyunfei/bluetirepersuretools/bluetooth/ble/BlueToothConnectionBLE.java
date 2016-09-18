@@ -18,6 +18,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.util.Log;
 
+import com.zhangyunfei.bluetirepersuretools.bluetooth.contract.BluetoothConnection;
 import com.zhangyunfei.bluetirepersuretools.bluetooth.contract.ConnectionState;
 import com.zhangyunfei.bluetirepersuretools.bluetooth.simple.BluetoothConnectionCallback;
 
@@ -28,8 +29,9 @@ import java.util.UUID;
  * Created by zhangyunfei on 16/9/17.
  */
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
-public class BleService {
+public class BlueToothConnectionBLE extends BluetoothConnection {
     private static final Object LOCK = new Object();
+    private static final boolean DEBUG = true;
     private static UUID uuidServer = UUID.fromString("0000fff0-0000-1000-8000-00805f9b34fb");
     private static UUID uuidServec = UUID.fromString("0000fff0-0000-1000-8000-00805f9b34fb");
 
@@ -40,9 +42,7 @@ public class BleService {
 
 
     private static final String TAG = "BleService";
-    private BluetoothConnectionCallback bluetoothConnectionCallback;
     private BluetoothAdapter mBluetoothAdapter;
-    private Context mContext;
     private BluetoothManager mBluetoothManager;
     private BluetoothDevice mBluetoothDevice;
     private BluetoothGatt mBluetoothGatt;
@@ -52,20 +52,9 @@ public class BleService {
     private BluetoothGattCharacteristic characteristic2;
 
 
-    public BleService(Context mContext) {
-        this.mContext = mContext;
-        initialize();
-    }
-
-    public BleService(Context context, BluetoothConnectionCallback bluetoothConnectionCallback) {
-        if (context == null)
-            throw new NullPointerException();
-        if (bluetoothConnectionCallback == null)
-            throw new NullPointerException();
-        this.mContext = context;
-        this.bluetoothConnectionCallback = bluetoothConnectionCallback;
-
-        initialize();
+    public BlueToothConnectionBLE(Context context, BluetoothConnectionCallback bluetoothConnectionCallback) {
+        super(context, bluetoothConnectionCallback);
+        initialize(context);
     }
 
     /**
@@ -73,11 +62,11 @@ public class BleService {
      *
      * @return Return true if the initialization is successful.
      */
-    public boolean initialize() {
+    public boolean initialize(Context context) {
         // For API level 18 and above, get a reference to BluetoothAdapter through
         // BluetoothManager.
         if (mBluetoothManager == null) {
-            mBluetoothManager = (BluetoothManager) mContext.getSystemService(Context.BLUETOOTH_SERVICE);
+            mBluetoothManager = (BluetoothManager) context.getSystemService(Context.BLUETOOTH_SERVICE);
             if (mBluetoothManager == null) {
                 Log.e(TAG, "Unable to initialize BluetoothManager.");
                 return false;
@@ -94,7 +83,7 @@ public class BleService {
         // 确保蓝牙在设备上可以开启
         if (mBluetoothAdapter == null || !mBluetoothAdapter.isEnabled()) {
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            mContext.startActivity(enableBtIntent);//, REQUEST_ENABLE_BT);
+            context.startActivity(enableBtIntent);//, REQUEST_ENABLE_BT);
         }
         return true;
     }
@@ -134,7 +123,7 @@ public class BleService {
      * {@code BluetoothGattCallback#onConnectionStateChange(android.bluetooth.BluetoothGatt, int, int)}
      * callback.
      */
-    public boolean connect(final BluetoothDevice bluetoothDevice) throws Exception {
+    public void connect(final BluetoothDevice bluetoothDevice) throws Exception {
         if (bluetoothDevice == null) {
             throw new Exception("Device not found.  Unable to connect.");
         }
@@ -148,17 +137,16 @@ public class BleService {
                 && mBluetoothGatt != null) {
             Log.e(TAG, "Trying to use an existing mBluetoothGatt for connection.");
             if (mBluetoothGatt.connect()) {
-                return true;
             } else {
-                return false;
+                if (getConnectionCallback() != null)
+                    getConnectionCallback().onConnectionFailed();
             }
         }
 
         // We want to directly connect to the device, so we are setting the autoConnect
         // parameter to false.
-        mBluetoothGatt = BleHelper.connectGatt(bluetoothDevice, mContext, false, mGattCallback);
+        mBluetoothGatt = BleHelper.connectGatt(bluetoothDevice, getContext(), false, mGattCallback);
         Log.e(TAG, "Trying to create a new connection.");
-        return true;
     }
 
 
@@ -177,6 +165,8 @@ public class BleService {
             } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
                 Log.e(TAG, "Disconnected from GATT server.");
                 setState(ConnectionState.STATE_NONE);
+                if (getConnectionCallback() != null)
+                    getConnectionCallback().onConnectionLost();
             }
         }
 
@@ -191,11 +181,14 @@ public class BleService {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                if (bluetoothConnectionCallback != null)
-                    bluetoothConnectionCallback.onConnected(mBluetoothDevice.getName());
+                if (getConnectionCallback() != null)
+                    getConnectionCallback().onConnected(mBluetoothDevice.getName());
             } else {
                 Log.e(TAG, "onServicesDiscovered error falure " + status);
                 setState(ConnectionState.STATE_NONE);
+
+                if (getConnectionCallback() != null)
+                    getConnectionCallback().onConnectionLost();
             }
 
         }
@@ -277,8 +270,8 @@ public class BleService {
         byte[] bytes = characteristic.getValue();
         String str = new String(bytes);
         Log.e(TAG, "## readCharacteristic, 读取到: " + str);
-        if (bluetoothConnectionCallback != null)
-            bluetoothConnectionCallback.onReadMessage(bytes);
+        if (getConnectionCallback() != null)
+            getConnectionCallback().onReadMessage(bytes);
     }
 
     /**
@@ -300,13 +293,6 @@ public class BleService {
         mBluetoothGatt.writeCharacteristic(characteristic);
     }
 
-    public int getState() {
-        return state;
-    }
-
-    private void setState(int state) {
-        this.state = state;
-    }
 
     public void start() {
 
@@ -328,12 +314,27 @@ public class BleService {
             characteristic2.setWriteType(BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT);
             mBluetoothGatt.writeCharacteristic(characteristic2);
 
-            if (bluetoothConnectionCallback != null)
-                bluetoothConnectionCallback.onWriteMessage(cmd);
+            if (getConnectionCallback() != null)
+                getConnectionCallback().onWriteMessage(cmd);
         }
     }
 
 
-    public void ensureDiscoverable(Activity activity) {
+    /**
+     * 可被发现
+     *
+     * @param context context
+     */
+    public void ensureDiscoverable(Context context) {
+        if (context == null)
+            throw new NullPointerException();
+        if (DEBUG) Log.e(TAG, "ensure discoverable");
+        if (mBluetoothAdapter.getScanMode() !=
+                BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE) {
+            Intent discoverableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
+            discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300);
+            context.startActivity(discoverableIntent);
+        }
     }
+
 }

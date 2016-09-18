@@ -41,7 +41,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.zhangyunfei.bluetirepersuretools.R;
-import com.zhangyunfei.bluetirepersuretools.bluetooth.ble.BleService;
 import com.zhangyunfei.bluetirepersuretools.bluetooth.contract.BluetoothConnection;
 import com.zhangyunfei.bluetirepersuretools.bluetooth.contract.ConnectionState;
 import com.zhangyunfei.bluetirepersuretools.bluetooth.simple.BluetoothConnectionCallbackImpl;

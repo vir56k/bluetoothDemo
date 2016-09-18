@@ -1,13 +1,11 @@
 package com.zhangyunfei.bluetirepersuretools.bluetooth.contract;
 
-import android.app.Activity;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.util.Log;
 
-import com.zhangyunfei.bluetirepersuretools.bluetooth.contract.ConnectionState;
 import com.zhangyunfei.bluetirepersuretools.bluetooth.simple.BluetoothConnectionCallback;
-import com.zhangyunfei.bluetirepersuretools.bluetooth.simple.BluetoothService2;
+import com.zhangyunfei.bluetirepersuretools.bluetooth.simple.BluetoothConnectionSimple;
 
 import java.lang.ref.WeakReference;
 
@@ -67,7 +65,7 @@ public abstract class BluetoothConnection {
      *
      * @param device The BluetoothDevice to connect
      */
-    public abstract void connect(BluetoothDevice device);
+    public abstract void connect(BluetoothDevice device) throws Exception;
 
     /**
      * Stop all threads
@@ -78,7 +76,7 @@ public abstract class BluetoothConnection {
      * Write to the ConnectedThread in an unsynchronized manner
      *
      * @param out The bytes to write
-     * @see BluetoothService2.ConnectedThread#write(byte[])
+     * @see BluetoothConnectionSimple.ConnectedThread#write(byte[])
      */
     public abstract void write(byte[] out);
 

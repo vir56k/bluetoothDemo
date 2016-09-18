@@ -41,7 +41,7 @@
 //import android.widget.Toast;
 //
 //import com.zhangyunfei.bluetirepersuretools.bluetooth.simple.BluetoothConnectionCallbackImpl;
-//import com.zhangyunfei.bluetirepersuretools.bluetooth.simple.BluetoothService2;
+//import com.zhangyunfei.bluetirepersuretools.bluetooth.simple.BluetoothConnectionSimple;
 //import com.zhangyunfei.bluetirepersuretools.R;
 //
 ///**
@@ -80,7 +80,7 @@
 //    // Local Bluetooth adapter
 //    private BluetoothAdapter mBluetoothAdapter = null;
 //    // Member object for the chat services
-//    private BluetoothService2 mChatService = null;
+//    private BluetoothConnectionSimple mChatService = null;
 //
 //    private TextView edit_text_out;
 //    private MyHandlerLoop myHandlerLoop;
@@ -140,7 +140,7 @@
 //        // onResume() will be called when ACTION_REQUEST_ENABLE activity returns.
 //        if (mChatService != null) {
 //            // Only if the state is STATE_NONE, do we know that we haven't started already
-//            if (mChatService.getState() == BluetoothService2.STATE_NONE) {
+//            if (mChatService.getState() == BluetoothConnectionSimple.STATE_NONE) {
 //                // Start the Bluetooth chat services
 //                mChatService.start();
 //            }
@@ -172,7 +172,7 @@
 //        });
 //
 //        // Initialize the BluetoothChatService to perform bluetooth connections
-//        mChatService = new BluetoothService2(this, new BluetoothConnectionCallbackImpl(mHandler));
+//        mChatService = new BluetoothConnectionSimple(this, new BluetoothConnectionCallbackImpl(mHandler));
 //
 //        // Initialize the buffer for outgoing messages
 //        mOutStringBuffer = new StringBuilder("");
@@ -206,7 +206,7 @@
 //     */
 //    private void sendMessageTo(String message) {
 //        // Check that we're actually connected before trying anything
-//        if (mChatService.getState() != BluetoothService2.STATE_CONNECTED) {
+//        if (mChatService.getState() != BluetoothConnectionSimple.STATE_CONNECTED) {
 //            Toast.makeText(this, R.string.not_connected, Toast.LENGTH_SHORT).show();
 //            return;
 //        }
@@ -244,15 +244,15 @@
 //                case MESSAGE_STATE_CHANGE:
 //                    Log.d(TAG, "## 消息状态发生改变: " + msg.arg1);
 //                    switch (msg.arg1) {
-//                        case BluetoothService2.STATE_CONNECTED:
+//                        case BluetoothConnectionSimple.STATE_CONNECTED:
 //                            setStatus(getString(R.string.title_connected_to, mConnectedDeviceName));
 //                            mConversationArrayAdapter.clear();
 //                            break;
-//                        case BluetoothService2.STATE_CONNECTING:
+//                        case BluetoothConnectionSimple.STATE_CONNECTING:
 //                            setStatus(R.string.title_connecting);
 //                            break;
-//                        case BluetoothService2.STATE_LISTEN:
-//                        case BluetoothService2.STATE_NONE:
+//                        case BluetoothConnectionSimple.STATE_LISTEN:
+//                        case BluetoothConnectionSimple.STATE_NONE:
 //                            setStatus(R.string.title_not_connected);
 //                            break;
 //                    }

@@ -38,9 +38,9 @@ import java.util.UUID;
  * incoming connections, a thread for connecting with a device, and a
  * thread for performing data transmissions when connected.
  */
-public class BluetoothService2 extends BluetoothConnection {
+public class BluetoothConnectionSimple extends BluetoothConnection {
     // Debugging
-    private static final String TAG = "BluetoothService2";
+    private static final String TAG = "BluetoothConnection";
     private static final boolean D = true;
 
     private static final UUID SPP_UUID = UUID
@@ -56,7 +56,7 @@ public class BluetoothService2 extends BluetoothConnection {
      *
      * @param context The UI Activity Context
      */
-    public BluetoothService2(Context context, BluetoothConnectionCallback connectionCallback) {
+    public BluetoothConnectionSimple(Context context, BluetoothConnectionCallback connectionCallback) {
         super(context, connectionCallback);
         mAdapter = BluetoothAdapter.getDefaultAdapter();
         setState(ConnectionState.STATE_NONE);
@@ -103,7 +103,7 @@ public class BluetoothService2 extends BluetoothConnection {
         if (getConnectionCallback() != null)
             getConnectionCallback().onConnectionFailed();
         // Start the service over to restart listening mode
-        BluetoothService2.this.start();
+        BluetoothConnectionSimple.this.start();
     }
 
     /**
@@ -114,7 +114,7 @@ public class BluetoothService2 extends BluetoothConnection {
             getConnectionCallback().onConnectionLost();
 
         // Start the service over to restart listening mode
-        BluetoothService2.this.start();
+        BluetoothConnectionSimple.this.start();
     }
 
 
@@ -175,7 +175,7 @@ public class BluetoothService2 extends BluetoothConnection {
             }
 
             // Reset the ConnectThread because we're done
-            synchronized (BluetoothService2.this) {
+            synchronized (BluetoothConnectionSimple.this) {
                 mConnectThread = null;
             }
 
@@ -239,7 +239,7 @@ public class BluetoothService2 extends BluetoothConnection {
                     Log.e(TAG, "disconnected", e);
                     connectionLost();
                     // Start the service over to restart listening mode
-                    BluetoothService2.this.start();
+                    BluetoothConnectionSimple.this.start();
                     break;
                 }
             }
@@ -294,7 +294,7 @@ public class BluetoothService2 extends BluetoothConnection {
      * @param device The BluetoothDevice to connect
      */
     public synchronized void connect(BluetoothDevice device) {
-        if (BluetoothService2.D) Log.e(BluetoothService2.TAG, "connect to: " + device);
+        if (BluetoothConnectionSimple.D) Log.e(BluetoothConnectionSimple.TAG, "connect to: " + device);
 
         // Cancel any thread attempting to make a connection
         if (getState() == ConnectionState.STATE_CONNECTING) {
@@ -311,7 +311,7 @@ public class BluetoothService2 extends BluetoothConnection {
         }
 
         // Start the thread to connect with the given device
-        mConnectThread = new BluetoothService2.ConnectThread(device);
+        mConnectThread = new BluetoothConnectionSimple.ConnectThread(device);
         mConnectThread.start();
         setState(ConnectionState.STATE_CONNECTING);
     }
@@ -320,11 +320,11 @@ public class BluetoothService2 extends BluetoothConnection {
      * Write to the ConnectedThread in an unsynchronized manner
      *
      * @param out The bytes to write
-     * @see BluetoothService2.ConnectedThread#write(byte[])
+     * @see BluetoothConnectionSimple.ConnectedThread#write(byte[])
      */
     public void write(byte[] out) {
         // Create temporary object
-        BluetoothService2.ConnectedThread r;
+        BluetoothConnectionSimple.ConnectedThread r;
         // Synchronize a copy of the ConnectedThread
         synchronized (this) {
             if (getState() != ConnectionState.STATE_CONNECTED) return;
@@ -360,7 +360,7 @@ public class BluetoothService2 extends BluetoothConnection {
      * Stop all threads
      */
     public synchronized void stop() {
-        if (BluetoothService2.D) Log.e(BluetoothService2.TAG, "stop");
+        if (BluetoothConnectionSimple.D) Log.e(BluetoothConnectionSimple.TAG, "stop");
 
         if (mConnectThread != null) {
             mConnectThread.cancel();

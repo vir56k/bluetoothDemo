@@ -42,9 +42,9 @@ import android.widget.Toast;
 
 import com.zhangyunfei.bluetirepersuretools.R;
 import com.zhangyunfei.bluetirepersuretools.bluetooth.ble.BleService;
-import com.zhangyunfei.bluetirepersuretools.bluetooth.ble.BluetoothBLE;
+import com.zhangyunfei.bluetirepersuretools.bluetooth.contract.BluetoothConnection;
+import com.zhangyunfei.bluetirepersuretools.bluetooth.contract.ConnectionState;
 import com.zhangyunfei.bluetirepersuretools.bluetooth.simple.BluetoothConnectionCallbackImpl;
-import com.zhangyunfei.bluetirepersuretools.bluetooth.simple.BluetoothService2;
 
 /**
  * This is the main Activity that displays the current chat session.
@@ -82,7 +82,7 @@ public class BluetoothDemoActivity2 extends Activity {
     // Local Bluetooth adapter
     private BluetoothAdapter mBluetoothAdapter = null;
     // Member object for the chat services
-    private BluetoothBLE mChatService = null;
+    private BluetoothConnection bluetoothConnection = null;
 
     private TextView edit_text_out;
     private MyHandlerLoop myHandlerLoop;
@@ -128,7 +128,7 @@ public class BluetoothDemoActivity2 extends Activity {
             startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
             // Otherwise, setup the chat session
         } else {
-            if (mChatService == null) setupChat();
+            if (bluetoothConnection == null) setupChat();
         }
     }
 
@@ -140,11 +140,11 @@ public class BluetoothDemoActivity2 extends Activity {
         // Performing this check in onResume() covers the case in which BT was
         // not enabled during onStart(), so we were paused to enable it...
         // onResume() will be called when ACTION_REQUEST_ENABLE activity returns.
-        if (mChatService != null) {
+        if (bluetoothConnection != null) {
             // Only if the state is STATE_NONE, do we know that we haven't started already
-            if (mChatService.getState() == BluetoothService2.STATE_NONE) {
+            if (bluetoothConnection.getState() == ConnectionState.STATE_NONE) {
                 // Start the Bluetooth chat services
-                mChatService.start();
+                bluetoothConnection.start();
             }
         }
     }
@@ -174,7 +174,7 @@ public class BluetoothDemoActivity2 extends Activity {
         });
 
         // Initialize the BluetoothChatService to perform bluetooth connections
-        mChatService = new BluetoothBLE(this, new BluetoothConnectionCallbackImpl(mHandler));
+        bluetoothConnection = bluetoothConnectionCreator.createConnection(this, new BluetoothConnectionCallbackImpl(mHandler));
 
         // Initialize the buffer for outgoing messages
         mOutStringBuffer = new StringBuilder("");
@@ -197,7 +197,7 @@ public class BluetoothDemoActivity2 extends Activity {
         super.onDestroy();
         myHandlerLoop.stopLoop();
         // Stop the Bluetooth chat services
-        if (mChatService != null) mChatService.stop();
+        if (bluetoothConnection != null) bluetoothConnection.stop();
         if (D) Log.e(TAG, "--- ON DESTROY ---");
     }
 
@@ -208,7 +208,7 @@ public class BluetoothDemoActivity2 extends Activity {
      */
     private void sendMessageTo(String message) {
         // Check that we're actually connected before trying anything
-        if (mChatService.getState() != BluetoothService2.STATE_CONNECTED) {
+        if (bluetoothConnection.getState() != ConnectionState.STATE_CONNECTED) {
             Toast.makeText(this, R.string.not_connected, Toast.LENGTH_SHORT).show();
             return;
         }
@@ -219,7 +219,7 @@ public class BluetoothDemoActivity2 extends Activity {
             mOutStringBuffer.append("\r");
             // Get the message bytes and tell the BluetoothChatService to write
             byte[] send = mOutStringBuffer.toString().getBytes();
-            mChatService.write(send);
+            bluetoothConnection.write(send);
 
             // Reset out string buffer to zero and clear the edit text field
             mOutStringBuffer.setLength(0);
@@ -246,15 +246,15 @@ public class BluetoothDemoActivity2 extends Activity {
                 case MESSAGE_STATE_CHANGE:
                     Log.d(TAG, "## 消息状态发生改变: " + msg.arg1);
                     switch (msg.arg1) {
-                        case BluetoothService2.STATE_CONNECTED:
+                        case ConnectionState.STATE_CONNECTED:
                             setStatus(getString(R.string.title_connected_to, mConnectedDeviceName));
                             mConversationArrayAdapter.clear();
                             break;
-                        case BluetoothService2.STATE_CONNECTING:
+                        case ConnectionState.STATE_CONNECTING:
                             setStatus(R.string.title_connecting);
                             break;
-                        case BluetoothService2.STATE_LISTEN:
-                        case BluetoothService2.STATE_NONE:
+                        case ConnectionState.STATE_LISTEN:
+                        case ConnectionState.STATE_NONE:
                             setStatus(R.string.title_not_connected);
                             break;
                     }
@@ -321,7 +321,8 @@ public class BluetoothDemoActivity2 extends Activity {
         // Get the BluetoothDevice object
         BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
         // Attempt to connect to the device
-        mChatService.connect(device.getAddress());
+//        bluetoothConnection.connect(device);
+        bluetoothConnection.connect(device);
     }
 
     @Override
@@ -342,7 +343,7 @@ public class BluetoothDemoActivity2 extends Activity {
                 return true;
             case R.id.discoverable://可被发现设备
                 // Ensure this device is discoverable by others
-                mChatService.ensureDiscoverable(getActivity());
+                bluetoothConnection.ensureDiscoverable(getActivity());
                 return true;
         }
         return false;

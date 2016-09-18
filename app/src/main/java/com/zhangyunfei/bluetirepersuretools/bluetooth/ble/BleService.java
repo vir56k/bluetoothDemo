@@ -13,15 +13,14 @@ import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothProfile;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Handler;
 import android.util.Log;
 
-import com.zhangyunfei.bluetirepersuretools.activity.BluetoothDemoActivity2;
-import com.zhangyunfei.bluetirepersuretools.bluetooth.Utils;
+import com.zhangyunfei.bluetirepersuretools.bluetooth.contract.ConnectionState;
 import com.zhangyunfei.bluetirepersuretools.bluetooth.simple.BluetoothConnectionCallback;
 
-import java.net.DatagramPacket;
 import java.util.List;
 import java.util.UUID;
 
@@ -30,9 +29,14 @@ import java.util.UUID;
  */
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
 public class BleService {
-//    private final static String UUID_KEY_DATA = "0000180d-0000-1000-8000-00805f9b34fb";
-    private static final UUID SPP_UUID = UUID
-            .fromString("00001101-0000-1000-8000-00805F9B34FB");
+    private static final Object LOCK = new Object();
+    private static UUID uuidServer = UUID.fromString("0000fff0-0000-1000-8000-00805f9b34fb");
+    private static UUID uuidServec = UUID.fromString("0000fff0-0000-1000-8000-00805f9b34fb");
+
+    private static UUID uuidChar1 = UUID.fromString("0000fff1-0000-1000-8000-00805f9b34fb");
+    private static UUID uuidChar3 = UUID.fromString("0000fff1-0000-1000-8000-00805f9b34fb");
+    private static UUID uuidChar2 = UUID.fromString("0000fff2-0000-1000-8000-00805f9b34fb");
+    private static UUID uuidChar4 = UUID.fromString("0000fff2-0000-1000-8000-00805f9b34fb");
 
 
     private static final String TAG = "BleService";
@@ -44,6 +48,8 @@ public class BleService {
     private BluetoothGatt mBluetoothGatt;
     private Handler mHandler = new Handler();
     private int state;
+    private BluetoothGattCharacteristic characteristic1;
+    private BluetoothGattCharacteristic characteristic2;
 
 
     public BleService(Context mContext) {
@@ -135,6 +141,7 @@ public class BleService {
         if (mBluetoothAdapter == null || bluetoothDevice == null) {
             throw new Exception("BluetoothAdapter not initialized or unspecified address.");
         }
+        setState(ConnectionState.STATE_CONNECTING);
         mBluetoothDevice = bluetoothDevice;
         // Previously connected device.  Try to reconnect.
         if (mBluetoothDevice.getAddress().equals(bluetoothDevice.getAddress())
@@ -149,7 +156,7 @@ public class BleService {
 
         // We want to directly connect to the device, so we are setting the autoConnect
         // parameter to false.
-        mBluetoothGatt = bluetoothDevice.connectGatt(mContext, false, mGattCallback);
+        mBluetoothGatt = BleHelper.connectGatt(bluetoothDevice, mContext, false, mGattCallback);
         Log.e(TAG, "Trying to create a new connection.");
         return true;
     }
@@ -168,20 +175,47 @@ public class BleService {
                         mBluetoothGatt.discoverServices());
 
             } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
-
                 Log.e(TAG, "Disconnected from GATT server.");
+                setState(ConnectionState.STATE_NONE);
             }
         }
 
         @Override
         public void onServicesDiscovered(BluetoothGatt gatt, int status) {
-            Log.e(TAG, "onServicesDiscovered received: " + status);
             if (status == BluetoothGatt.GATT_SUCCESS) {
+                Log.e(TAG, "onServicesDiscovered received:  SUCCESS");
+                initCharacteristic();
+                setState(ConnectionState.STATE_CONNECTED);
+                try {
+                    Thread.sleep(200);//延迟发送，否则第一次消息会不成功
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                if (bluetoothConnectionCallback != null)
+                    bluetoothConnectionCallback.onConnected(mBluetoothDevice.getName());
             } else {
+                Log.e(TAG, "onServicesDiscovered error falure " + status);
+                setState(ConnectionState.STATE_NONE);
             }
 
+        }
 
-            getSupportedGattServices();
+        @Override
+        public void onCharacteristicWrite(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
+            super.onCharacteristicWrite(gatt, characteristic, status);
+            Log.e(TAG, "onCharacteristicWrite status: " + status);
+        }
+
+        @Override
+        public void onDescriptorWrite(BluetoothGatt gatt, BluetoothGattDescriptor descriptor, int status) {
+            super.onDescriptorWrite(gatt, descriptor, status);
+            Log.e(TAG, "onDescriptorWrite status: " + status);
+        }
+
+        @Override
+        public void onDescriptorRead(BluetoothGatt gatt, BluetoothGattDescriptor descriptor, int status) {
+            super.onDescriptorRead(gatt, descriptor, status);
+            Log.e(TAG, "onDescriptorRead status: " + status);
         }
 
         @Override
@@ -189,16 +223,43 @@ public class BleService {
                                          BluetoothGattCharacteristic characteristic,
                                          int status) {
             Log.e(TAG, "onCharacteristicRead status: " + status);
-
         }
 
         @Override
         public void onCharacteristicChanged(BluetoothGatt gatt,
                                             BluetoothGattCharacteristic characteristic) {
             Log.e(TAG, "onCharacteristicChanged characteristic: " + characteristic);
+            readCharacteristic(characteristic);
         }
     };
 
+    /**
+     * @param context
+     * @return true 支持ble，false 不支持
+     */
+    public static boolean isSupportBLE(Context context) {
+        if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public void initCharacteristic() {
+        if (mBluetoothGatt == null) throw new NullPointerException();
+        List<BluetoothGattService> services = mBluetoothGatt.getServices();
+        Log.e(TAG, services.toString());
+        BluetoothGattService service = mBluetoothGatt.getService(uuidServer);
+        characteristic1 = service.getCharacteristic(uuidChar1);
+        characteristic2 = service.getCharacteristic(uuidChar2);
+
+        final String uuid = "00002902-0000-1000-8000-00805f9b34fb";
+        if (mBluetoothGatt == null) throw new NullPointerException();
+        mBluetoothGatt.setCharacteristicNotification(characteristic1, true);
+        BluetoothGattDescriptor descriptor = characteristic1.getDescriptor(UUID.fromString(uuid));
+        descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
+        mBluetoothGatt.writeDescriptor(descriptor);
+    }
 
     /**
      * Request a read on a given {@code BluetoothGattCharacteristic}. The read result is reported
@@ -213,6 +274,11 @@ public class BleService {
             return;
         }
         mBluetoothGatt.readCharacteristic(characteristic);
+        byte[] bytes = characteristic.getValue();
+        String str = new String(bytes);
+        Log.e(TAG, "## readCharacteristic, 读取到: " + str);
+        if (bluetoothConnectionCallback != null)
+            bluetoothConnectionCallback.onReadMessage(bytes);
     }
 
     /**
@@ -234,82 +300,12 @@ public class BleService {
         mBluetoothGatt.writeCharacteristic(characteristic);
     }
 
-    /**
-     * Retrieves a list of supported GATT services on the connected device. This should be
-     * invoked only after {@code BluetoothGatt#discoverServices()} completes successfully.
-     *
-     * @return A {@code List} of supported services.
-     */
-    public List<BluetoothGattService> getSupportedGattServices() {
-        if (mBluetoothGatt == null) return null;
-        displayGattServices(mBluetoothGatt.getServices());
-        return mBluetoothGatt.getServices();
-    }
-
-
-    private void displayGattServices(List<BluetoothGattService> gattServices) {
-        if (gattServices == null) return;
-
-        for (BluetoothGattService gattService : gattServices) {
-            //-----Service的字段信息-----//
-            int type = gattService.getType();
-            Log.e(TAG, "-->service type:" + Utils.getServiceType(type));
-            Log.e(TAG, "-->includedServices size:" + gattService.getIncludedServices().size());
-            Log.e(TAG, "-->service uuid:" + gattService.getUuid());
-
-            //-----Characteristics的字段信息-----//
-            List<BluetoothGattCharacteristic> gattCharacteristics = gattService.getCharacteristics();
-            for (final BluetoothGattCharacteristic gattCharacteristic : gattCharacteristics) {
-                Log.e(TAG, "---->char uuid:" + gattCharacteristic.getUuid());
-
-                int permission = gattCharacteristic.getPermissions();
-                Log.e(TAG, "---->char permission:" + Utils.getCharPermission(permission));
-
-                int property = gattCharacteristic.getProperties();
-                Log.e(TAG, "---->char property:" + Utils.getCharPropertie(property));
-
-                byte[] data = gattCharacteristic.getValue();
-                if (data != null && data.length > 0) {
-                    Log.e(TAG, "---->char value:" + new String(data));
-                }
-
-                //UUID_KEY_DATA是可以跟蓝牙模块串口通信的Characteristic
-                if (gattCharacteristic.getUuid().toString().equals(SPP_UUID)) {
-                    //测试读取当前Characteristic数据，会触发mOnDataAvailable.onCharacteristicRead()
-                    mHandler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            readCharacteristic(gattCharacteristic);
-                        }
-                    }, 500);
-
-                    //接受Characteristic被写的通知,收到蓝牙模块的数据后会触发mOnDataAvailable.onCharacteristicWrite()
-                    setCharacteristicNotification(gattCharacteristic, true);
-                    //设置数据内容
-                    gattCharacteristic.setValue("send data->");
-                    //往蓝牙模块写入数据
-                    writeCharacteristic(gattCharacteristic);
-                }
-
-                //-----Descriptors的字段信息-----//
-                List<BluetoothGattDescriptor> gattDescriptors = gattCharacteristic.getDescriptors();
-                for (BluetoothGattDescriptor gattDescriptor : gattDescriptors) {
-                    Log.e(TAG, "-------->desc uuid:" + gattDescriptor.getUuid());
-                    int descPermission = gattDescriptor.getPermissions();
-                    Log.e(TAG, "-------->desc permission:" + Utils.getDescPermission(descPermission));
-
-                    byte[] desData = gattDescriptor.getValue();
-                    if (desData != null && desData.length > 0) {
-                        Log.e(TAG, "-------->desc value:" + new String(desData));
-                    }
-                }
-            }
-        }//
-
-    }
-
     public int getState() {
         return state;
+    }
+
+    private void setState(int state) {
+        this.state = state;
     }
 
     public void start() {
@@ -317,11 +313,24 @@ public class BleService {
     }
 
     public void stop() {
-
+        setState(ConnectionState.STATE_NONE);
+        characteristic1 = null;
+        characteristic2 = null;
+        if (mBluetoothGatt != null) {
+            mBluetoothGatt.close();
+        }
     }
 
-    public void write(byte[] send) {
+    public void write(byte[] cmd) {
+        Log.e(TAG, "write:" + new String(cmd));
+        synchronized (LOCK) {
+            characteristic2.setValue(cmd);
+            characteristic2.setWriteType(BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT);
+            mBluetoothGatt.writeCharacteristic(characteristic2);
 
+            if (bluetoothConnectionCallback != null)
+                bluetoothConnectionCallback.onWriteMessage(cmd);
+        }
     }
 
 

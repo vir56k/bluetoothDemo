@@ -20,9 +20,7 @@ import java.util.Set;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothDevice;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -36,8 +34,9 @@ import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
 import com.zhangyunfei.bluetirepersuretools.R;
+import com.zhangyunfei.bluetirepersuretools.bluetooth.ble.BlueToothDiscoveryBLE;
 import com.zhangyunfei.bluetirepersuretools.bluetooth.contract.BlueToothDiscovery;
-import com.zhangyunfei.bluetirepersuretools.bluetooth.contract.BlueToothDiscoverySimple;
+import com.zhangyunfei.bluetirepersuretools.bluetooth.simple.BlueToothDiscoverySimple;
 import com.zhangyunfei.bluetirepersuretools.bluetooth.contract.DeviceDiscoveryCallback;
 
 /**
@@ -94,7 +93,8 @@ public class DeviceListActivity extends Activity {
         newDevicesListView.setAdapter(mNewDevicesArrayAdapter);
         newDevicesListView.setOnItemClickListener(mDeviceClickListener);
 
-        blueToothDiscovery = new BlueToothDiscoverySimple(this, deviceDiscoveryCallback);
+//        blueToothDiscovery = new BlueToothDiscoverySimple(this, deviceDiscoveryCallback);
+        blueToothDiscovery = new BlueToothDiscoveryBLE(this, deviceDiscoveryCallback);
 
         // Get a set of currently paired devices
         Set<BluetoothDevice> pairedDevices = blueToothDiscovery.getBondedDevices();
@@ -161,6 +161,11 @@ public class DeviceListActivity extends Activity {
     private DeviceDiscoveryCallback deviceDiscoveryCallback = new DeviceDiscoveryCallback() {
         @Override
         public void onDeviceFound(BluetoothDevice device) {
+            String str = device.getName() + "\n" + device.getAddress();
+            for (int i = 0; i < mNewDevicesArrayAdapter.getCount(); i++) {
+                if (mNewDevicesArrayAdapter.getItem(i).equals(str))
+                    return;
+            }
             mNewDevicesArrayAdapter.add(device.getName() + "\n" + device.getAddress());
         }
 

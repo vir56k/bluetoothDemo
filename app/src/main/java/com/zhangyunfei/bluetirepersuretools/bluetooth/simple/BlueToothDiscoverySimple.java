@@ -1,4 +1,4 @@
-package com.zhangyunfei.bluetirepersuretools.bluetooth.contract;
+package com.zhangyunfei.bluetirepersuretools.bluetooth.simple;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -6,6 +6,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+
+import com.zhangyunfei.bluetirepersuretools.bluetooth.contract.BlueToothDiscovery;
+import com.zhangyunfei.bluetirepersuretools.bluetooth.contract.DeviceDiscoveryCallback;
 
 import java.util.Set;
 
@@ -18,7 +21,7 @@ public class BlueToothDiscoverySimple extends BlueToothDiscovery {
     private BluetoothAdapter mBtAdapter;
 
     public BlueToothDiscoverySimple(Context context, DeviceDiscoveryCallback callback) {
-        super(context,callback);
+        super(context, callback);
 
         // Get the local Bluetooth adapter
         mBtAdapter = BluetoothAdapter.getDefaultAdapter();

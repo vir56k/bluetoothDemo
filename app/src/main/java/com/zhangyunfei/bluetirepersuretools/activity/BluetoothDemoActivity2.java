@@ -67,6 +67,7 @@ public class BluetoothDemoActivity2 extends Activity {
     // Intent request codes
     private static final int REQUEST_CONNECT_DEVICE = 1;
     private static final int REQUEST_ENABLE_BT = 3;
+    private int TYPE = 1;
 
     // Layout Views
     private ListView mConversationView;
@@ -113,6 +114,11 @@ public class BluetoothDemoActivity2 extends Activity {
             finish();
             return;
         }
+
+        if (getIntent() != null) {
+            TYPE = getIntent().getIntExtra("TYPE", 1);
+        }
+
     }
 
     @Override
@@ -172,11 +178,13 @@ public class BluetoothDemoActivity2 extends Activity {
             }
         });
 
-        // Initialize the BluetoothChatService to perform bluetooth connections
-        bluetoothConnection = bluetoothConnectionCreator.createConnection(this, new BluetoothConnectionCallbackImpl(mHandler));
-
         // Initialize the buffer for outgoing messages
         mOutStringBuffer = new StringBuilder("");
+
+        // Initialize the BluetoothChatService to perform bluetooth connections
+//        bluetoothConnection = bluetoothConnectionCreator.createConnection(this, new BluetoothConnectionCallbackImpl(mHandler));
+        bluetoothConnection = bluetoothConnectionCreator.createConnectionByType(TYPE, this, new BluetoothConnectionCallbackImpl(mHandler));
+
     }
 
     @Override

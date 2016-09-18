@@ -25,6 +25,7 @@ import android.os.Build;
 import android.util.Log;
 
 import com.zhangyunfei.bluetirepersuretools.bluetooth.contract.BluetoothConnection;
+import com.zhangyunfei.bluetirepersuretools.bluetooth.contract.BluetoothConnectionCallback;
 import com.zhangyunfei.bluetirepersuretools.bluetooth.contract.ConnectionState;
 
 import java.io.IOException;

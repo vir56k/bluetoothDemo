@@ -4,7 +4,6 @@ import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.util.Log;
 
-import com.zhangyunfei.bluetirepersuretools.bluetooth.simple.BluetoothConnectionCallback;
 import com.zhangyunfei.bluetirepersuretools.bluetooth.simple.BluetoothConnectionSimple;
 
 import java.lang.ref.WeakReference;

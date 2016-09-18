@@ -1,7 +1,6 @@
 package com.zhangyunfei.bluetirepersuretools.bluetooth.ble;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
@@ -20,7 +19,7 @@ import android.util.Log;
 
 import com.zhangyunfei.bluetirepersuretools.bluetooth.contract.BluetoothConnection;
 import com.zhangyunfei.bluetirepersuretools.bluetooth.contract.ConnectionState;
-import com.zhangyunfei.bluetirepersuretools.bluetooth.simple.BluetoothConnectionCallback;
+import com.zhangyunfei.bluetirepersuretools.bluetooth.contract.BluetoothConnectionCallback;
 
 import java.util.List;
 import java.util.UUID;
@@ -175,7 +174,6 @@ public class BlueToothConnectionBLE extends BluetoothConnection {
             if (status == BluetoothGatt.GATT_SUCCESS) {
                 Log.e(TAG, "onServicesDiscovered received:  SUCCESS");
                 initCharacteristic();
-                setState(ConnectionState.STATE_CONNECTED);
                 try {
                     Thread.sleep(200);//延迟发送，否则第一次消息会不成功
                 } catch (InterruptedException e) {
@@ -183,6 +181,7 @@ public class BlueToothConnectionBLE extends BluetoothConnection {
                 }
                 if (getConnectionCallback() != null)
                     getConnectionCallback().onConnected(mBluetoothDevice.getName());
+                setState(ConnectionState.STATE_CONNECTED);
             } else {
                 Log.e(TAG, "onServicesDiscovered error falure " + status);
                 setState(ConnectionState.STATE_NONE);

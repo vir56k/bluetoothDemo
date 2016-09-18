@@ -1,4 +1,4 @@
-package com.zhangyunfei.bluetirepersuretools.bluetooth.simple;
+package com.zhangyunfei.bluetirepersuretools.bluetooth.contract;
 
 /**
  * Created by zhangyunfei on 16/9/17.

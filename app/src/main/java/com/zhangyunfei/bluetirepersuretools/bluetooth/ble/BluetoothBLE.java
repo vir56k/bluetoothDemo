@@ -15,7 +15,7 @@
 //import android.os.Build;
 //import android.util.Log;
 //
-//import com.zhangyunfei.bluetirepersuretools.bluetooth.simple.BluetoothConnectionCallback;
+//import com.zhangyunfei.bluetirepersuretools.bluetooth.contract.BluetoothConnectionCallback;
 //
 //import java.lang.reflect.InvocationTargetException;
 //import java.lang.reflect.Method;

@@ -6,6 +6,7 @@ import android.os.Message;
 import android.util.Log;
 
 import com.zhangyunfei.bluetirepersuretools.activity.BluetoothDemoActivity2;
+import com.zhangyunfei.bluetirepersuretools.bluetooth.contract.BluetoothConnectionCallback;
 
 /**
  * Created by zhangyunfei on 16/9/17.

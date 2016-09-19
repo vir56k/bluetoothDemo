@@ -33,6 +33,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
+import com.example.bluetoothlib.BlueToothMode;
+import com.example.bluetoothlib.BluetoothConnectionCreator;
 import com.zhangyunfei.bluetirepersuretools.R;
 import com.example.bluetoothlib.ble.BlueToothDiscoveryBLE;
 import com.example.bluetoothlib.contract.BlueToothDiscovery;
@@ -94,7 +96,7 @@ public class DeviceListActivity extends Activity {
         newDevicesListView.setOnItemClickListener(mDeviceClickListener);
 
 //        blueToothDiscovery = new BlueToothDiscoverySimple(this, deviceDiscoveryCallback);
-        blueToothDiscovery = new BlueToothDiscoveryBLE(this, deviceDiscoveryCallback);
+        blueToothDiscovery = BluetoothConnectionCreator.createDiscovery(BlueToothMode.MODE_AUTO, this, deviceDiscoveryCallback);
 
         // Get a set of currently paired devices
         Set<BluetoothDevice> pairedDevices = blueToothDiscovery.getBondedDevices();

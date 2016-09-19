@@ -40,6 +40,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.bluetoothlib.BluetoothConnectionCreator;
 import com.zhangyunfei.bluetirepersuretools.R;
 import com.example.bluetoothlib.contract.BluetoothConnection;
 import com.example.bluetoothlib.contract.ConnectionState;
@@ -66,7 +67,7 @@ public class BluetoothDemoActivity2 extends Activity {
     // Intent request codes
     private static final int REQUEST_CONNECT_DEVICE = 1;
     private static final int REQUEST_ENABLE_BT = 3;
-    private int TYPE = 1;
+    private int TYPE = 0;
 
     // Layout Views
     private ListView mConversationView;
@@ -115,7 +116,7 @@ public class BluetoothDemoActivity2 extends Activity {
         }
 
         if (getIntent() != null) {
-            TYPE = getIntent().getIntExtra("TYPE", 1);
+            TYPE = getIntent().getIntExtra("TYPE", 0);
         }
 
     }
@@ -181,8 +182,8 @@ public class BluetoothDemoActivity2 extends Activity {
         mOutStringBuffer = new StringBuilder("");
 
         // Initialize the BluetoothChatService to perform bluetooth connections
-//        bluetoothConnection = bluetoothConnectionCreator.createConnection(this, new BluetoothConnectionCallbackImpl(mHandler));
-        bluetoothConnection = bluetoothConnectionCreator.createConnectionByType(TYPE, this, new BluetoothConnectionCallbackImpl(mHandler));
+//        bluetoothConnection = BluetoothConnectionCreator.createConnection(this, new BluetoothConnectionCallbackImpl(mHandler));
+        bluetoothConnection = BluetoothConnectionCreator.createConnectionByType(TYPE, this, new BluetoothConnectionCallbackImpl(mHandler));
 
     }
 

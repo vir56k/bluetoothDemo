@@ -41,8 +41,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.zhangyunfei.bluetirepersuretools.R;
-import com.zhangyunfei.bluetirepersuretools.bluetooth.contract.BluetoothConnection;
-import com.zhangyunfei.bluetirepersuretools.bluetooth.contract.ConnectionState;
+import com.example.bluetoothlib.contract.BluetoothConnection;
+import com.example.bluetoothlib.contract.ConnectionState;
 
 /**
  * This is the main Activity that displays the current chat session.

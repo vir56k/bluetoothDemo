@@ -1,8 +1,0 @@
-CHANGED,/Users/zhangyunfei/git/BlueTirepersureTools/bluetoothLeGatt/build/intermediates/transforms/instantRun/debug/folders/4000/5/enhanced/com/example/bluetooth/le/DeviceScanActivity$4$override.class
-CHANGED,/Users/zhangyunfei/git/BlueTirepersureTools/bluetoothLeGatt/build/intermediates/transforms/instantRun/debug/folders/4000/5/enhanced/com/example/bluetooth/le/DeviceScanActivity$override.class
-CHANGED,/Users/zhangyunfei/git/BlueTirepersureTools/bluetoothLeGatt/build/intermediates/transforms/instantRun/debug/folders/4000/5/enhanced/com/example/bluetooth/le/DeviceScanActivity$4$1$override.class
-CHANGED,/Users/zhangyunfei/git/BlueTirepersureTools/bluetoothLeGatt/build/intermediates/transforms/instantRun/debug/folders/4000/5/enhanced/com/android/tools/fd/runtime/AppPatchesLoaderImpl.class
-CHANGED,/Users/zhangyunfei/git/BlueTirepersureTools/bluetoothLeGatt/build/intermediates/transforms/instantRun/debug/folders/4000/5/enhanced/com/example/bluetooth/le/DeviceScanActivity$2$override.class
-CHANGED,/Users/zhangyunfei/git/BlueTirepersureTools/bluetoothLeGatt/build/intermediates/transforms/instantRun/debug/folders/4000/5/enhanced/com/example/bluetooth/le/DeviceScanActivity$1$override.class
-CHANGED,/Users/zhangyunfei/git/BlueTirepersureTools/bluetoothLeGatt/build/intermediates/transforms/instantRun/debug/folders/4000/5/enhanced/com/example/bluetooth/le/DeviceScanActivity$3$override.class
-CHANGED,/Users/zhangyunfei/git/BlueTirepersureTools/bluetoothLeGatt/build/intermediates/transforms/instantRun/debug/folders/4000/5/enhanced/com/example/bluetooth/le/DeviceScanActivity$5$override.class

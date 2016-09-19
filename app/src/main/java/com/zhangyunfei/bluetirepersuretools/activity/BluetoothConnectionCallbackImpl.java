@@ -5,7 +5,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
-import com.zhangyunfei.bluetirepersuretools.bluetooth.contract.BluetoothConnectionCallback;
+import com.example.bluetoothlib.contract.BluetoothConnectionCallback;
+
 
 /**
  * Created by zhangyunfei on 16/9/17.

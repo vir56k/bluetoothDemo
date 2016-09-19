@@ -34,10 +34,10 @@ import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
 import com.zhangyunfei.bluetirepersuretools.R;
-import com.zhangyunfei.bluetirepersuretools.bluetooth.ble.BlueToothDiscoveryBLE;
-import com.zhangyunfei.bluetirepersuretools.bluetooth.contract.BlueToothDiscovery;
-import com.zhangyunfei.bluetirepersuretools.bluetooth.simple.BlueToothDiscoverySimple;
-import com.zhangyunfei.bluetirepersuretools.bluetooth.contract.DeviceDiscoveryCallback;
+import com.example.bluetoothlib.ble.BlueToothDiscoveryBLE;
+import com.example.bluetoothlib.contract.BlueToothDiscovery;
+import com.example.bluetoothlib.simple.BlueToothDiscoverySimple;
+import com.example.bluetoothlib.contract.DeviceDiscoveryCallback;
 
 /**
  * This Activity appears as a dialog. It lists any paired devices and

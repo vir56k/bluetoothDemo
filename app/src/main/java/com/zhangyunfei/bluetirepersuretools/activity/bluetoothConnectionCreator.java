@@ -3,10 +3,10 @@ package com.zhangyunfei.bluetirepersuretools.activity;
 import android.content.Context;
 import android.os.Build;
 
-import com.zhangyunfei.bluetirepersuretools.bluetooth.ble.BlueToothConnectionBLE;
-import com.zhangyunfei.bluetirepersuretools.bluetooth.contract.BluetoothConnection;
-import com.zhangyunfei.bluetirepersuretools.bluetooth.contract.BluetoothConnectionCallback;
-import com.zhangyunfei.bluetirepersuretools.bluetooth.simple.BluetoothConnectionSimple;
+import com.example.bluetoothlib.ble.BlueToothConnectionBLE;
+import com.example.bluetoothlib.contract.BluetoothConnection;
+import com.example.bluetoothlib.contract.BluetoothConnectionCallback;
+import com.example.bluetoothlib.simple.BluetoothConnectionSimple;
 
 /**
  * Created by zhangyunfei on 16/9/18.

@@ -6,7 +6,6 @@ import android.os.Build;
 import com.zhangyunfei.bluetirepersuretools.bluetooth.ble.BlueToothConnectionBLE;
 import com.zhangyunfei.bluetirepersuretools.bluetooth.contract.BluetoothConnection;
 import com.zhangyunfei.bluetirepersuretools.bluetooth.contract.BluetoothConnectionCallback;
-import com.zhangyunfei.bluetirepersuretools.bluetooth.simple.BluetoothConnectionCallbackImpl;
 import com.zhangyunfei.bluetirepersuretools.bluetooth.simple.BluetoothConnectionSimple;
 
 /**

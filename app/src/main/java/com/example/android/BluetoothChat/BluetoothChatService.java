@@ -173,7 +173,7 @@
 //        mConnectedThread.start();
 //
 //        // Send the name of the connected device back to the UI Activity
-//        Message msg = mHandler.obtainMessage(BluetoothDemoActivity.MESSAGE_DEVICE_NAME);
+//        Message msg = mHandler.obtainMessage(BluetoothDemoActivity.CONNECTED);
 //        Bundle bundle = new Bundle();
 //        bundle.putString(BluetoothDemoActivity.DEVICE_NAME, device.getName());
 //        msg.setData(bundle);

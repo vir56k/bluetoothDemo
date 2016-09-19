@@ -43,7 +43,6 @@ import android.widget.Toast;
 import com.zhangyunfei.bluetirepersuretools.R;
 import com.zhangyunfei.bluetirepersuretools.bluetooth.contract.BluetoothConnection;
 import com.zhangyunfei.bluetirepersuretools.bluetooth.contract.ConnectionState;
-import com.zhangyunfei.bluetirepersuretools.bluetooth.simple.BluetoothConnectionCallbackImpl;
 
 /**
  * This is the main Activity that displays the current chat session.
@@ -57,7 +56,7 @@ public class BluetoothDemoActivity2 extends Activity {
     public static final int MESSAGE_STATE_CHANGE = 1;
     public static final int MESSAGE_READ = 2;
     public static final int MESSAGE_WRITE = 3;
-    public static final int MESSAGE_DEVICE_NAME = 4;
+    public static final int CONNECTED = 4;
     public static final int MESSAGE_TOAST = 5;
 
     // Key names received from the BluetoothChatService Handler
@@ -278,7 +277,7 @@ public class BluetoothDemoActivity2 extends Activity {
                     String readMessage = new String(readBuf);
                     mConversationArrayAdapter.add("收到:  " + readMessage);
                     break;
-                case MESSAGE_DEVICE_NAME:
+                case CONNECTED:
                     // save the connected device's name
                     mConnectedDeviceName = msg.getData().getString(DEVICE_NAME);
                     Toast.makeText(getApplicationContext(), "已连接到 "

@@ -1,11 +1,10 @@
-package com.zhangyunfei.bluetirepersuretools.bluetooth.simple;
+package com.zhangyunfei.bluetirepersuretools.activity;
 
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
-import com.zhangyunfei.bluetirepersuretools.activity.BluetoothDemoActivity2;
 import com.zhangyunfei.bluetirepersuretools.bluetooth.contract.BluetoothConnectionCallback;
 
 /**
@@ -31,7 +30,7 @@ public class BluetoothConnectionCallbackImpl implements BluetoothConnectionCallb
     public void onConnected(String deviceName) {
         Log.e(TAG, "## 连接成功: " + deviceName);
         // Send the name of the connected device back to the UI Activity
-        Message msg = mHandler.obtainMessage(BluetoothDemoActivity2.MESSAGE_DEVICE_NAME);
+        Message msg = mHandler.obtainMessage(BluetoothDemoActivity2.CONNECTED);
         Bundle bundle = new Bundle();
         bundle.putString(BluetoothDemoActivity2.DEVICE_NAME, deviceName);
         msg.setData(bundle);

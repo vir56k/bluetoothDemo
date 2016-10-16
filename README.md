@@ -12,6 +12,10 @@
 
 #Android使用BLE(低功耗蓝牙，Bluetooth Low Energy)
 
+#背景
+在学习BLE的过程中，积累了一些心得的DEMO，放到Github，形成本文。感兴趣的同学可以下载到源代码。
+github: https://github.com/vir56k/bluetoothDemo
+
 #什么是BLE(低功耗蓝牙)
 
 BLE(Bluetooth Low Energy，低功耗蓝牙)是对传统蓝牙BR/EDR技术的补充。

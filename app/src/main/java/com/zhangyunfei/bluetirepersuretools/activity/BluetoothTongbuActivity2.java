@@ -40,19 +40,25 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.bluetoothlib.BluetoothConnectionCreator;
-import com.example.bluetoothlib.contract.ConnectionChannel;
-import com.zhangyunfei.bluetirepersuretools.R;
+import com.example.bluetoothlib.ble.BleConnectionChannelExtra;
 import com.example.bluetoothlib.contract.ConnectionState;
+import com.example.bluetoothlib.util.BluetoothAdapterUtil;
+import com.zhangyunfei.bluetirepersuretools.R;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeoutException;
 
 /**
+ * 收发消息同步
  * This is the main Activity that displays the current chat session.
  */
-public class BluetoothDemoActivity2 extends Activity {
+public class BluetoothTongbuActivity2 extends Activity {
     // Debugging
-    private static final String TAG = "BluetoothDemoActivity";
+    private static final String TAG = "BluetoothTongbu";
     private static final boolean D = true;
 
     // Message types sent from the BluetoothChatService Handler
@@ -61,7 +67,6 @@ public class BluetoothDemoActivity2 extends Activity {
     public static final int MESSAGE_WRITE = 3;
     public static final int CONNECTED = 4;
     public static final int MESSAGE_TOAST = 5;
-    private static final long LOOP_INTERVAL = 1;
 
     // Key names received from the BluetoothChatService Handler
     public static final String DEVICE_NAME = "device_name";
@@ -85,11 +90,13 @@ public class BluetoothDemoActivity2 extends Activity {
     // Local Bluetooth adapter
     private BluetoothAdapter mBluetoothAdapter = null;
     // Member object for the chat services
-    private ConnectionChannel bluetoothConnection = null;
+    private BleConnectionChannelExtra bluetoothConnection = null;
 
     private TextView edit_text_out;
     private MyHandlerLoop myHandlerLoop;
     private Switch switch1_loop;
+    private byte limit = 0x3E;
+    private boolean isLoop;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -104,6 +111,7 @@ public class BluetoothDemoActivity2 extends Activity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 myHandlerLoop.stopLoop();
+                isLoop = false;
             }
         });
 
@@ -175,9 +183,14 @@ public class BluetoothDemoActivity2 extends Activity {
             public void onClick(View v) {
                 // Send a message using content of the edit text widget
                 String message = edit_text_out.getText().toString();
-                sendMessageTo(message);
-                if (isEnableLoop())
+                if (isEnableLoop()) {
+//                    runLoop();
+                    isLoop = true;
+                    runLoopWhile();
                     myHandlerLoop.startLoopSend();
+                } else {
+                    sendMessageTo(message);
+                }
             }
         });
 
@@ -186,8 +199,71 @@ public class BluetoothDemoActivity2 extends Activity {
 
         // Initialize the BluetoothChatService to perform bluetooth connections
 //        bluetoothConnection = BluetoothConnectionCreator.createConnection(this, new BluetoothConnectionCallbackImpl(mHandler));
-        bluetoothConnection = BluetoothConnectionCreator.createConnectionByType(TYPE, this, new BluetoothConnectionCallbackImpl(mHandler));
+        bluetoothConnection = new BleConnectionChannelExtra(this,
+                BluetoothAdapterUtil.getBluetoothAdapter(this),
+                new BluetoothConnectionCallbackImpl(mHandler));
 
+    }
+
+    private void runLoopWhile() {
+        fixedThreadPool.execute(new Runnable() {
+            @Override
+            public void run() {
+                while (isLoop) {
+                    justSendAndrReceive("ATI");
+                }
+            }
+        });
+    }
+
+    private ExecutorService fixedThreadPool = Executors.newFixedThreadPool(10);
+
+    private void runLoop() {
+        myHandlerLoop.post(new Runnable() {
+            @Override
+            public void run() {
+                sendOnThread();
+                runLoop();
+            }
+        });
+
+    }
+
+    private void sendOnThread() {
+        if (fixedThreadPool == null) return;
+        fixedThreadPool.execute(new Runnable() {
+            @Override
+            public void run() {
+                Log.e(TAG, "## invoke sendOnThread ============ threadid = " + Thread.currentThread().getName());
+                synchronized (this) {
+                    justSendAndrReceive("ATI");
+                }
+            }
+
+
+        });
+    }
+
+    private void justSend(String message) {
+        Log.e(TAG, "## invoke justSend ============ threadid = " + Thread.currentThread().getName());
+        try {
+             bluetoothConnection.write(message.getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void justSendAndrReceive(String message) {
+        Log.e(TAG, "## invoke justSendAndrReceive ============ threadid = " + Thread.currentThread().getName());
+        try {
+            byte[] res = bluetoothConnection.sendAndReceive(message.getBytes(), limit, 15000);
+            showResponse(res);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (TimeoutException e) {
+            e.printStackTrace();
+            showResponse("超时".getBytes());
+        }
     }
 
     @Override
@@ -205,6 +281,8 @@ public class BluetoothDemoActivity2 extends Activity {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        fixedThreadPool.shutdownNow();
+
         myHandlerLoop.stopLoop();
         // Stop the Bluetooth chat services
         if (bluetoothConnection != null) bluetoothConnection.close();
@@ -216,7 +294,7 @@ public class BluetoothDemoActivity2 extends Activity {
      *
      * @param message A string of text to send.
      */
-    private void sendMessageTo(String message) {
+    private synchronized void sendMessageTo(String message) {
         // Check that we're actually connected before trying anything
         if (bluetoothConnection.getState() != ConnectionState.STATE_CONNECTED) {
             Toast.makeText(this, R.string.not_connected, Toast.LENGTH_SHORT).show();
@@ -228,18 +306,20 @@ public class BluetoothDemoActivity2 extends Activity {
             mOutStringBuffer.append(message);
             mOutStringBuffer.append("\r");
             // Get the message bytes and tell the BluetoothChatService to write
-            byte[] send = mOutStringBuffer.toString().getBytes();
-            try {
-                Log.e(TAG, "## invoke sendMessageTo ============ threadid = " + Thread.currentThread().getName());
-                bluetoothConnection.write(send);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            justSendAndrReceive(message);
 
             // Reset out string buffer to zero and clear the edit text field
             mOutStringBuffer.setLength(0);
 //            mOutEditText.setText(mOutStringBuffer);
         }
+    }
+
+    private void showSend(byte[] bytes) {
+        mHandler.obtainMessage(MESSAGE_WRITE, bytes).sendToTarget();
+    }
+
+    private void showResponse(byte[] bytes) {
+        mHandler.obtainMessage(MESSAGE_READ, bytes).sendToTarget();
     }
 
 
@@ -278,13 +358,13 @@ public class BluetoothDemoActivity2 extends Activity {
                     byte[] writeBuf = (byte[]) msg.obj;
                     // construct a string from the buffer
                     String writeMessage = new String(writeBuf);
-                    mConversationArrayAdapter.add("发送:  " + writeMessage);
+                    mConversationArrayAdapter.add(String.format("[%s]发送:  %s", getNowTime(), writeMessage));
                     break;
                 case MESSAGE_READ:
                     byte[] readBuf = (byte[]) msg.obj;
                     // construct a string from the valid bytes in the buffer
                     String readMessage = new String(readBuf);
-                    mConversationArrayAdapter.add("收到:  " + readMessage);
+                    mConversationArrayAdapter.add(String.format("[%s]收到: %s ", getNowTime(), readMessage));
                     break;
                 case CONNECTED:
                     // save the connected device's name
@@ -292,7 +372,7 @@ public class BluetoothDemoActivity2 extends Activity {
                     Toast.makeText(getApplicationContext(), "已连接到 "
                             + mConnectedDeviceName, Toast.LENGTH_SHORT).show();
                     //先关闭回显
-                    sendMessageTo("ATE0");
+                    justSend("ATE0\r");
                     break;
                 case MESSAGE_TOAST:
                     Toast.makeText(getApplicationContext(), msg.getData().getString(TOAST),
@@ -337,7 +417,7 @@ public class BluetoothDemoActivity2 extends Activity {
         BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
         // Attempt to connect to the device
 //        bluetoothConnection.connect(device);
-        bluetoothConnection.connect(address,false);
+        bluetoothConnection.connect(address, false);
     }
 
     @Override
@@ -372,11 +452,18 @@ public class BluetoothDemoActivity2 extends Activity {
         return this;
     }
 
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("mm:ss.SSS");
+
+    public String getNowTime() {
+        return simpleDateFormat.format(Calendar.getInstance().getTime());
+    }
+
     public static class MyHandlerLoop extends Handler {
         private static final int MSG_SEND_LOOP = 1;
-        BluetoothDemoActivity2 bluetoothDemoActivity;
+        private static final long LOOP_INTERVAL = 100;
+        BluetoothTongbuActivity2 bluetoothDemoActivity;
 
-        public MyHandlerLoop(BluetoothDemoActivity2 bluetoothDemoActivity) {
+        public MyHandlerLoop(BluetoothTongbuActivity2 bluetoothDemoActivity) {
             this.bluetoothDemoActivity = bluetoothDemoActivity;
         }
 
@@ -389,7 +476,7 @@ public class BluetoothDemoActivity2 extends Activity {
                 if (bluetoothDemoActivity.isEnableLoop()) {
                     String message = bluetoothDemoActivity.edit_text_out.getText().toString();
                     if (!TextUtils.isEmpty(message)) {
-                        bluetoothDemoActivity.sendMessageTo(message);
+                        bluetoothDemoActivity.justSendAndrReceive(message);
                         sendMessageDelayed(obtainMessage(MSG_SEND_LOOP), LOOP_INTERVAL);
                     }
                 }

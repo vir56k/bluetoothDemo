@@ -7,6 +7,7 @@ import android.view.View;
 
 import com.example.bluetoothlib.BlueToothMode;
 import com.zhangyunfei.bluetirepersuretools.R;
+import com.zhangyunfei.bluetirepersuretools.activity.lookservice.LookServiceActivity;
 
 public class LauncherActivity extends Activity {
 
@@ -28,6 +29,13 @@ public class LauncherActivity extends Activity {
         } else if (v.getId() == R.id.button3) {
             Intent intent = new Intent(this, BluetoothDemoActivity2.class);
             intent.putExtra("TYPE", BlueToothMode.MODE_AUTO);
+            startActivity(intent);
+        }  else if (v.getId() == R.id.btnTongbu) {
+            Intent intent = new Intent(this, BluetoothTongbuActivity2.class);
+            intent.putExtra("TYPE", BlueToothMode.MODE_AUTO);
+            startActivity(intent);
+        } else if (v.getId() == R.id.btnLookService) {
+            Intent intent = new Intent(this, LookServiceActivity.class);
             startActivity(intent);
         }
     }

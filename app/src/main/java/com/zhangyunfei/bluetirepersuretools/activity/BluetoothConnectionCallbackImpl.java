@@ -5,13 +5,13 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
-import com.example.bluetoothlib.contract.BluetoothConnectionCallback;
+import com.example.bluetoothlib.contract.ConnectionCallback;
 
 
 /**
  * Created by zhangyunfei on 16/9/17.
  */
-public class BluetoothConnectionCallbackImpl implements BluetoothConnectionCallback {
+public class BluetoothConnectionCallbackImpl implements ConnectionCallback {
 
     private static final String TAG = "BLUE";
     private android.os.Handler mHandler;
@@ -20,8 +20,7 @@ public class BluetoothConnectionCallbackImpl implements BluetoothConnectionCallb
         this.mHandler = mHandler;
     }
 
-    @Override
-    public void onMessageStateChange(int oldState, int newState) {
+    public void onStateChange(int oldState, int newState) {
         Log.e(TAG, "## 消息状态发生改变: " + +oldState + " -> " + newState);
         // Give the new state to the Handler so the UI Activity can update
         mHandler.obtainMessage(BluetoothDemoActivity2.MESSAGE_STATE_CHANGE, newState, -1).sendToTarget();
@@ -39,7 +38,7 @@ public class BluetoothConnectionCallbackImpl implements BluetoothConnectionCallb
     }
 
     @Override
-    public void onConnectionFailed() {
+    public void onConnectionFailed(String str) {
         Log.e(TAG, "## 连接失败 ");
         // Send a failure message back to the Activity
         Message msg = mHandler.obtainMessage(BluetoothDemoActivity2.MESSAGE_TOAST);
@@ -74,5 +73,11 @@ public class BluetoothConnectionCallbackImpl implements BluetoothConnectionCallb
         // Share the sent message back to the UI Activity
         mHandler.obtainMessage(BluetoothDemoActivity2.MESSAGE_WRITE, -1, -1, buffer)
                 .sendToTarget();
+    }
+
+    @Override
+    public void onConnectStart(String mBluetoothDeviceAddress) {
+        Log.e(TAG, "## onConnectStart ");
+
     }
 }

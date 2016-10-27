@@ -11,6 +11,13 @@
     tools:context=".activity.LauncherActivity">
 
     <Button
+        android:id="@+id/btnLookService"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="onClickView"
+        android:text="蓝牙设备列表" />
+
+    <Button
         android:id="@+id/button1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -30,4 +37,11 @@
         android:layout_height="wrap_content"
         android:onClick="onClickView"
         android:text="自动选择蓝牙连接" />
+
+    <Button
+        android:id="@+id/btnTongbu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="onClickView"
+        android:text="同步收发数据" />
 </LinearLayout>

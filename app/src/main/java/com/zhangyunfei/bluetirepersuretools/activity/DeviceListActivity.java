@@ -111,6 +111,8 @@ public class DeviceListActivity extends Activity {
             String noDevices = getResources().getText(R.string.none_paired).toString();
             mPairedDevicesArrayAdapter.add(noDevices);
         }
+
+        scanButton.performClick();
     }
 
     @Override

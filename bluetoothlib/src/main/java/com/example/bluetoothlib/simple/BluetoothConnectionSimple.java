@@ -24,8 +24,8 @@ import android.content.Intent;
 import android.os.Build;
 import android.util.Log;
 
-import com.example.bluetoothlib.contract.BluetoothConnection;
-import com.example.bluetoothlib.contract.BluetoothConnectionCallback;
+import com.example.bluetoothlib.contract.ConnectionCallback;
+import com.example.bluetoothlib.contract.ConnectionChannel;
 import com.example.bluetoothlib.contract.ConnectionState;
 
 import java.io.IOException;
@@ -39,7 +39,7 @@ import java.util.UUID;
  * incoming connections, a thread for connecting with a device, and a
  * thread for performing data transmissions when connected.
  */
-public class BluetoothConnectionSimple extends BluetoothConnection {
+public class BluetoothConnectionSimple extends ConnectionChannel {
     // Debugging
     private static final String TAG = "BluetoothConnection";
     private static final boolean D = true;
@@ -57,7 +57,7 @@ public class BluetoothConnectionSimple extends BluetoothConnection {
      *
      * @param context The UI Activity Context
      */
-    public BluetoothConnectionSimple(Context context, BluetoothConnectionCallback connectionCallback) {
+    public BluetoothConnectionSimple(Context context, ConnectionCallback connectionCallback) {
         super(context, connectionCallback);
         mAdapter = BluetoothAdapter.getDefaultAdapter();
         setState(ConnectionState.STATE_NONE);
@@ -102,7 +102,7 @@ public class BluetoothConnectionSimple extends BluetoothConnection {
     private void raiseConnectionFailed() {
         String str = "Unable to connect device";
         if (getConnectionCallback() != null)
-            getConnectionCallback().onConnectionFailed();
+            getConnectionCallback().onConnectionFailed(str);
         // Start the service over to restart listening mode
         BluetoothConnectionSimple.this.start();
     }
@@ -355,6 +355,16 @@ public class BluetoothConnectionSimple extends BluetoothConnection {
         }
 
         setState(ConnectionState.STATE_LISTEN);
+    }
+
+    @Override
+    public void connect(String deviceAddress, boolean autoConnect) throws Exception {
+
+    }
+
+    @Override
+    public void close() {
+
     }
 
     /**

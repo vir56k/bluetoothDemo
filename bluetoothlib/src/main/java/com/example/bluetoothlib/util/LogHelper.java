@@ -5,6 +5,11 @@ package com.example.bluetoothlib.util;
  */
 public class LogHelper {
     public static void d(String tag, String msg) {
-        android.util.Log.d(tag, msg);
+        android.util.Log.e(tag, msg);
+    }
+
+    public static void e(String tag, String s) {
+        android.util.Log.e(tag, s);
+
     }
 }

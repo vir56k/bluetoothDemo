@@ -165,7 +165,7 @@ public class BleConnectionChannelExtra {
 
         @Override
         public void onReadMessage(byte[] buffer) {
-            Log.e(TAG, "## ============ threadid = " + Thread.currentThread().getName());
+//            Log.e(TAG, "## ============ threadid = " + Thread.currentThread().getName());
             printf(String.format("## [raise onReadMessage] %s, len=%s", OutputStringUtil.transferForPrint(buffer), (buffer == null ? 0 : buffer.length)));
             getBufferPool().offer(buffer);
         }
@@ -184,7 +184,7 @@ public class BleConnectionChannelExtra {
     }
 
     private void processReadBytes(byte[] tmp) {
-        Log.e(TAG, "## ============ threadid = " + Thread.currentThread().getName());
+//        Log.e(TAG, "## ============ threadid = " + Thread.currentThread().getName());
         printf("##      processReadBytes current thread " + Thread.currentThread().getId() + ", limit = " + mLimit);
         printf("##      [读取中...] data=" + OutputStringUtil.toHexString(tmp));
         try {

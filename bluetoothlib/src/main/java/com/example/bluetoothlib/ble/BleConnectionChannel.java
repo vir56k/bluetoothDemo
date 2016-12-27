@@ -304,7 +304,7 @@ public class BleConnectionChannel extends ConnectionChannel {
         @Override
         public void onCharacteristicChanged(BluetoothGatt gatt,
                                             BluetoothGattCharacteristic characteristic) {
-            Log.e(TAG, "## ============ threadid = " + Thread.currentThread().getName());
+//            Log.e(TAG, "## ============ threadid = " + Thread.currentThread().getName());
             byte[] bytes = readCharacteristic(characteristic);
             printf("## onCharacteristicChanged, len = " + (bytes == null ? 0 : bytes.length));
             if (bytes != null && getConnectionCallback() != null) {

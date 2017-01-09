@@ -1,2 +1,2 @@
-include ':app', ':tirepersuredemo', ':bluetoothlib'
+include ':app', ':tirepersuredemo', ':bluetoothlib', ':bluetoolth2server', ':bluetoolth2client'
 include ':zyfutilbluetoothprinter'

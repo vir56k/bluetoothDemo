@@ -1,7 +1,0 @@
-#Wed Dec 28 13:19:42 CST 2016
-base.0=/Users/zhangyunfei/git/BlueTirepersureTools/zyfutilbluetoothprinter/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_641218dc6b76e61753f312a6d6d79e90d5748f82
-renamed.1=classes2.dex
-renamed.0=classes.dex
-file.1=/Users/zhangyunfei/git/BlueTirepersureTools/zyfutilbluetoothprinter/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_645ec789c254540564b8ddef7b33a697db45da1c/classes.dex
-base.1=/Users/zhangyunfei/git/BlueTirepersureTools/zyfutilbluetoothprinter/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_645ec789c254540564b8ddef7b33a697db45da1c
-file.0=/Users/zhangyunfei/git/BlueTirepersureTools/zyfutilbluetoothprinter/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_641218dc6b76e61753f312a6d6d79e90d5748f82/classes.dex

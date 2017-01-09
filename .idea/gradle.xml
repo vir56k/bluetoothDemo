@@ -10,6 +10,8 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/bluetoolth2client" />
+            <option value="$PROJECT_DIR$/bluetoolth2server" />
             <option value="$PROJECT_DIR$/bluetoothlib" />
             <option value="$PROJECT_DIR$/tirepersuredemo" />
             <option value="$PROJECT_DIR$/zyfutilbluetoothprinter" />

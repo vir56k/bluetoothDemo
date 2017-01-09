@@ -4,6 +4,8 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/BlueTirepersureTools.iml" filepath="$PROJECT_DIR$/BlueTirepersureTools.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bluetoolth2client/bluetoolth2client.iml" filepath="$PROJECT_DIR$/bluetoolth2client/bluetoolth2client.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bluetoolth2server/bluetoolth2server.iml" filepath="$PROJECT_DIR$/bluetoolth2server/bluetoolth2server.iml" />
       <module fileurl="file://$PROJECT_DIR$/bluetoothlib/bluetoothlib.iml" filepath="$PROJECT_DIR$/bluetoothlib/bluetoothlib.iml" />
       <module fileurl="file://$PROJECT_DIR$/tirepersuredemo/tirepersuredemo.iml" filepath="$PROJECT_DIR$/tirepersuredemo/tirepersuredemo.iml" />
       <module fileurl="file://$PROJECT_DIR$/zyfutilbluetoothprinter/zyfutilbluetoothprinter.iml" filepath="$PROJECT_DIR$/zyfutilbluetoothprinter/zyfutilbluetoothprinter.iml" />

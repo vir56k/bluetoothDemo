@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">BLE周边模式demo</string>
+    <string name="ble_not_supported">ble_not_supported</string>
+</resources>

@@ -1,12 +1,17 @@
 # bluetoothDemo
 
-普通蓝牙EDR连接，BLE蓝牙连接,示例，操作蓝牙打印机demo
+经典蓝牙EDR连接，BLE蓝牙连接,示例，操作蓝牙打印机demo
 
 #子module描述
     * bluetoothlib 基础蓝牙类库
-    * app 普通蓝牙，BLE蓝牙扫描和连接演示
+    * app 普通蓝牙，BLE蓝牙扫描和连接演示，包括 BLE蓝牙作为客户端
     * zyfutilbluetoothprinter 蓝牙打印机演示
+    * bluetoolth2client 经典蓝牙作为客户端
+    * bluetoolth2server 经典蓝牙作为服务端
+    * bleperipheraldemo BLE蓝牙作为服务端
 
+# BLE低功耗蓝牙作为服务器（周围模式）
+https://github.com/vir56k/bluetoothDemo/blob/master/%E4%BD%8E%E5%8A%9F%E8%80%97%E8%93%9D%E7%89%99BLE%E5%91%A8%E8%BE%B9%E6%A8%A1%E5%BC%8F.md
 
 ==========================================
 
